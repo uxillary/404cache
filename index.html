@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>404CACHE - Booting...</title>
+  <style>
+    body {
+      background: #000;
+      color: #0ff;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.1rem;
+      padding: 40px;
+      overflow: hidden;
+    }
+
+    .terminal {
+      max-width: 700px;
+      margin: auto;
+      white-space: pre-wrap;
+      line-height: 1.6;
+      animation: flicker 2s infinite;
+    }
+
+    @keyframes flicker {
+      0% { opacity: 1; }
+      49% { opacity: 1; }
+      50% { opacity: 0.8; }
+      100% { opacity: 1; }
+    }
+
+    .glitch {
+      color: #f0f;
+      text-shadow: 1px 0 red, -1px 0 blue;
+      animation: glitch 1s infinite;
+    }
+
+    @keyframes glitch {
+      0% { text-shadow: 1px 0 red, -1px 0 blue; }
+      20% { text-shadow: 2px 0 red, -2px 0 blue; }
+      40% { text-shadow: -1px 0 red, 1px 0 blue; }
+      60% { text-shadow: 1px 0 red, -1px 0 blue; }
+      80% { text-shadow: 2px 0 red, -2px 0 blue; }
+      100% { text-shadow: 1px 0 red, -1px 0 blue; }
+    }
+
+    .blinker {
+      animation: blink 1.2s step-start infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    .bottom {
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="terminal">
+    <span class="glitch">404CACHE.EXE</span> <br>
+    <br>
+    Initializing memory fragments... ███████░░<br>
+    Parsing ghost files... ✓<br>
+    Patching nostalgia driver v2.03... ✓<br>
+    Synthesizing lost data... <span class="blinker">█</span><br><br>
+
+    <em>Welcome back, user.</em><br>
+    <span style="color:lime">The archive is currently rebooting.</span><br>
+    <br>
+    <span class="bottom">[System hint: return later to unlock new fragments]</span>
+  </div>
+</body>
+</html>
