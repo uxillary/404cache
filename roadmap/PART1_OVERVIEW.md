@@ -58,3 +58,37 @@ This project combines a simulated stock trading system with game mechanics like 
     }
   }
 }
+```
+
+---
+
+## ⚙️ Tech Stack
+
+- **Frontend:** HTML, CSS, JavaScript  
+*(Future: Consider React or Vue for scalability)*
+
+- **Backend:**  
+For MVP, use JSON files or static storage.  
+*(Future: Upgrade to Cloudflare Workers, Node.js, or lightweight backend)*
+
+- **Storage:** LocalStorage or IndexedDB (for offline persistence)
+
+---
+
+## 🚀 Current Focus
+
+We are starting **MVP 1**:
+- Core stock trading
+- Currency system
+- Basic upgrades
+- Local data persistence
+
+---
+
+## ✅ Quick Summary
+
+- Codex and contributors can start by focusing on Part 2 (MVP build steps).
+- JSON structure will be the backbone for stock and user management.
+- Simple, modular functions will make the system easy to expand later.
+
+---
