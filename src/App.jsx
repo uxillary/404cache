@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import BalanceDisplay from './components/BalanceDisplay';
 import StockList from './components/StockList';
+import Header from './components/Header';
 import './index.css';
 
 function App() {
   const [balance, setBalance] = useState(5000);
-  const [stocks, setStocks] = useState([
+  const [stocks] = useState([
     { name: 'BananaCorp 🍌', price: 120 },
     { name: 'DuckWare 🦆', price: 80 },
     { name: 'ToasterInc 🔥', price: 200 },
@@ -26,7 +27,7 @@ function App() {
   return (
     <div className="min-h-screen bg-black text-green-300 font-mono p-8 flex items-start justify-center">
       <div className="w-full max-w-3xl">
-        <h1 className="text-3xl mb-4 glitch text-center">404CACHE STOCK TERMINAL</h1>
+        <Header />
         <BalanceDisplay balance={balance} />
         <StockList stocks={stocks} onBuy={handleBuy} onSell={handleSell} />
       </div>
