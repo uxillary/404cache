@@ -26,7 +26,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-green-300 font-mono p-8 flex items-start justify-center">
+    <div className="min-h-screen bg-black text-green-300 font-mono p-4 md:p-8 flex items-start justify-center">
       <div className="w-full max-w-3xl">
         <Header />
         <BalanceDisplay balance={balance} />
