@@ -12,17 +12,32 @@ function App() {
     { name: 'DuckWare 🦆', price: 80 },
     { name: 'ToasterInc 🔥', price: 200 },
   ]);
+  const [portfolio, setPortfolio] = useState({
+    'BananaCorp 🍌': 0,
+    'DuckWare 🦆': 0,
+    'ToasterInc 🔥': 0,
+  });
 
   const handleBuy = (stockName) => {
     const stock = stocks.find((s) => s.name === stockName);
     if (balance >= stock.price) {
       setBalance(balance - stock.price);
+      setPortfolio((prev) => ({
+        ...prev,
+        [stockName]: prev[stockName] + 1,
+      }));
     }
   };
 
   const handleSell = (stockName) => {
     const stock = stocks.find((s) => s.name === stockName);
-    setBalance(balance + stock.price);
+    if (portfolio[stockName] > 0) {
+      setBalance(balance + stock.price);
+      setPortfolio((prev) => ({
+        ...prev,
+        [stockName]: prev[stockName] - 1,
+      }));
+    }
   };
 
   return (
@@ -30,7 +45,12 @@ function App() {
       <div className="w-full max-w-3xl">
         <Header />
         <BalanceDisplay balance={balance} />
-        <StockList stocks={stocks} onBuy={handleBuy} onSell={handleSell} />
+        <StockList
+          stocks={stocks}
+          onBuy={handleBuy}
+          onSell={handleSell}
+          portfolio={portfolio}
+        />
         <Footer />
       </div>
     </div>
