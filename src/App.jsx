@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import BalanceDisplay from './components/BalanceDisplay';
 import StockList from './components/StockList';
+import StockCount from './components/StockCount';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import './index.css';
@@ -30,6 +31,7 @@ function App() {
       <div className="w-full max-w-3xl">
         <Header />
         <BalanceDisplay balance={balance} />
+        <StockCount count={stocks.length} />
         <StockList stocks={stocks} onBuy={handleBuy} onSell={handleSell} />
         <Footer />
       </div>
