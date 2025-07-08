@@ -3,6 +3,7 @@ import BalanceDisplay from './components/BalanceDisplay';
 import PortfolioValueDisplay from './components/PortfolioValueDisplay';
 import StockList from './components/StockList';
 import StockCount from './components/StockCount';
+import PassiveIncomeDisplay from './components/PassiveIncomeDisplay';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import './index.css';
@@ -15,6 +16,11 @@ function App() {
   const [portfolio, setPortfolio] = useState(() => {
     const stored = localStorage.getItem('portfolio');
     return stored ? JSON.parse(stored) : {};
+  });
+  const [passiveRate] = useState(5); // currency earned every 10 seconds
+  const [passiveEarned, setPassiveEarned] = useState(() => {
+    const stored = localStorage.getItem('passiveEarned');
+    return stored ? JSON.parse(stored) : 0;
   });
   const [stocks, setStocks] = useState([
     { name: 'BananaCorp 🍌', price: 120 },
@@ -38,12 +44,24 @@ function App() {
   }, []);
 
   useEffect(() => {
+    const id = setInterval(() => {
+      setBalance((b) => b + passiveRate);
+      setPassiveEarned((e) => e + passiveRate);
+    }, 10000);
+    return () => clearInterval(id);
+  }, [passiveRate]);
+
+  useEffect(() => {
     localStorage.setItem('balance', JSON.stringify(balance));
   }, [balance]);
 
   useEffect(() => {
     localStorage.setItem('portfolio', JSON.stringify(portfolio));
   }, [portfolio]);
+
+  useEffect(() => {
+    localStorage.setItem('passiveEarned', JSON.stringify(passiveEarned));
+  }, [passiveEarned]);
 
   const handleBuy = (stockName) => {
     const stock = stocks.find((s) => s.name === stockName);
@@ -66,6 +84,7 @@ function App() {
       <div className="w-full max-w-3xl">
         <Header />
         <BalanceDisplay balance={balance} />
+        <PassiveIncomeDisplay rate={passiveRate} earned={passiveEarned} />
         <PortfolioValueDisplay stocks={stocks} portfolio={portfolio} />
         <StockCount count={stocks.length} />
         <StockList
