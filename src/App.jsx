@@ -9,6 +9,7 @@ import UpgradeShop from './components/UpgradeShop';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ToastContainer from './components/ToastContainer';
+import LoginStreakDisplay from './components/LoginStreakDisplay';
 import './index.css';
 
 function App() {
@@ -45,6 +46,8 @@ function App() {
     return stored ? JSON.parse(stored) : [];
   });
 
+  const [loginStreak, setLoginStreak] = useState(1);
+
   const [toasts, setToasts] = useState([]);
 
   const addToast = (text) => {
@@ -69,6 +72,37 @@ function App() {
     const id = setInterval(updateStockPrices, 5000);
     return () => clearInterval(id);
   }, []);
+
+  useEffect(() => {
+    const lastLogin = localStorage.getItem('lastLoginDate');
+    const storedStreak = localStorage.getItem('loginStreak');
+    const todayStr = new Date().toDateString();
+    let newStreak = 1;
+    let reward = 0;
+
+    if (lastLogin) {
+      const diff = Math.floor((new Date(todayStr) - new Date(lastLogin)) / 86400000);
+      if (diff === 1) {
+        newStreak = (storedStreak ? JSON.parse(storedStreak) : 0) + 1;
+        reward = 100;
+      } else if (diff === 0) {
+        newStreak = storedStreak ? JSON.parse(storedStreak) : 1;
+      }
+    }
+
+    setLoginStreak(newStreak);
+    localStorage.setItem('lastLoginDate', todayStr);
+    localStorage.setItem('loginStreak', JSON.stringify(newStreak));
+
+    if (reward) {
+      setBalance((b) => b + reward);
+      addToast(`Daily login bonus! +${reward}\u00A2 (Streak ${newStreak})`);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('loginStreak', JSON.stringify(loginStreak));
+  }, [loginStreak]);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -166,6 +200,7 @@ function App() {
       <div className="w-full max-w-3xl space-y-6">
         <Header />
         <BalanceDisplay balance={balance} />
+        <LoginStreakDisplay streak={loginStreak} />
         <PassiveIncomeDisplay rate={passiveRate} earned={passiveEarned} />
         <PortfolioValueDisplay stocks={stocks} portfolio={portfolio} />
         <PortfolioChart data={history} />
