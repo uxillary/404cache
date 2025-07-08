@@ -7,8 +7,14 @@ import Footer from './components/Footer';
 import './index.css';
 
 function App() {
-  const [balance, setBalance] = useState(5000);
-  const [portfolio, setPortfolio] = useState({});
+  const [balance, setBalance] = useState(() => {
+    const stored = localStorage.getItem('balance');
+    return stored ? JSON.parse(stored) : 5000;
+  });
+  const [portfolio, setPortfolio] = useState(() => {
+    const stored = localStorage.getItem('portfolio');
+    return stored ? JSON.parse(stored) : {};
+  });
   const [stocks, setStocks] = useState([
     { name: 'BananaCorp 🍌', price: 120 },
     { name: 'DuckWare 🦆', price: 80 },
@@ -29,6 +35,14 @@ function App() {
     const id = setInterval(updateStockPrices, 5000);
     return () => clearInterval(id);
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('balance', JSON.stringify(balance));
+  }, [balance]);
+
+  useEffect(() => {
+    localStorage.setItem('portfolio', JSON.stringify(portfolio));
+  }, [portfolio]);
 
   const handleBuy = (stockName) => {
     const stock = stocks.find((s) => s.name === stockName);

@@ -2,6 +2,10 @@
 
 This project uses Vite and React to showcase the early MVP for the 404Cache stock market game. Prices update automatically and you can buy or sell fictional stocks to watch your balance change.
 
+## Data Persistence
+
+Your balance and owned stock amounts are stored in **localStorage**, so your progress sticks around between browser sessions.
+
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
