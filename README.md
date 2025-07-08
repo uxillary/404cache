@@ -1,10 +1,10 @@
 # 404Cache Stock Market Demo
 
-This project uses Vite and React to showcase the early MVP for the 404Cache stock market game. Prices update automatically and you can buy or sell fictional stocks to watch your balance change. A running total of your portfolio value is displayed under your balance.
+This project uses Vite and React to showcase the early MVP for the 404Cache stock market game. Prices update automatically and you can buy or sell fictional stocks to watch your balance change. A running total of your portfolio value is displayed under your balance. A passive income system pays out every few seconds, and an upgrade shop lets you spend currency to increase that rate.
 
 ## Data Persistence
 
-Your balance and owned stock amounts are stored in **localStorage**, so your progress sticks around between browser sessions.
+Your balance, owned stock amounts, passive income rate, and purchased upgrades are stored in **localStorage**, so your progress sticks around between browser sessions.
 
 Currently, two official plugins are available:
 
