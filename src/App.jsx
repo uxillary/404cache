@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import PortfolioChart from './components/PortfolioChart';
 import BalanceDisplay from './components/BalanceDisplay';
 import PortfolioValueDisplay from './components/PortfolioValueDisplay';
 import StockList from './components/StockList';
@@ -27,6 +28,10 @@ function App() {
     { name: 'DuckWare 🦆', price: 80 },
     { name: 'ToasterInc 🔥', price: 200 },
   ]);
+  const [history, setHistory] = useState(() => {
+    const stored = localStorage.getItem('netWorthHistory');
+    return stored ? JSON.parse(stored) : [];
+  });
 
   const updateStockPrices = () => {
     setStocks((prev) =>
@@ -63,6 +68,19 @@ function App() {
     localStorage.setItem('passiveEarned', JSON.stringify(passiveEarned));
   }, [passiveEarned]);
 
+  useEffect(() => {
+    const portfolioValue = stocks.reduce((sum, stock) => {
+      const owned = portfolio[stock.name] || 0;
+      return sum + owned * stock.price;
+    }, 0);
+    const netWorth = balance + portfolioValue;
+    setHistory((h) => {
+      const updated = [...h, netWorth].slice(-20);
+      localStorage.setItem('netWorthHistory', JSON.stringify(updated));
+      return updated;
+    });
+  }, [stocks, balance, portfolio]);
+
   const handleBuy = (stockName) => {
     const stock = stocks.find((s) => s.name === stockName);
     if (balance >= stock.price) {
@@ -86,6 +104,7 @@ function App() {
         <BalanceDisplay balance={balance} />
         <PassiveIncomeDisplay rate={passiveRate} earned={passiveEarned} />
         <PortfolioValueDisplay stocks={stocks} portfolio={portfolio} />
+        <PortfolioChart data={history} />
         <StockCount count={stocks.length} />
         <StockList
           stocks={stocks}
