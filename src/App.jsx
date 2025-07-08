@@ -108,6 +108,24 @@ function App() {
     }
   };
 
+  const resetGame = () => {
+    setBalance(5000);
+    setPortfolio({});
+    setPassiveRate(5);
+    setPurchasedUpgrades([]);
+    setPassiveEarned(0);
+    setStocks([
+      { name: 'BananaCorp \ud83c\udf4c', price: 120 },
+      { name: 'DuckWare \ud83e\udd86', price: 80 },
+      { name: 'ToasterInc \ud83d\udd25', price: 200 },
+    ]);
+    localStorage.removeItem('balance');
+    localStorage.removeItem('portfolio');
+    localStorage.removeItem('passiveRate');
+    localStorage.removeItem('purchasedUpgrades');
+    localStorage.removeItem('passiveEarned');
+  };
+
   return (
     <div className="min-h-screen bg-black text-green-300 font-mono p-4 md:p-8 flex items-start justify-center">
       <div className="w-full max-w-3xl">
@@ -127,7 +145,7 @@ function App() {
           onBuy={handleBuy}
           onSell={handleSell}
         />
-        <Footer />
+        <Footer onReset={resetGame} />
       </div>
     </div>
   );
