@@ -7,6 +7,7 @@ import PassiveIncomeDisplay from './components/PassiveIncomeDisplay';
 import UpgradeShop from './components/UpgradeShop';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import ToastContainer from './components/ToastContainer';
 import './index.css';
 
 function App() {
@@ -34,17 +35,27 @@ function App() {
     return stored ? JSON.parse(stored) : 0;
   });
   const [stocks, setStocks] = useState([
-    { name: 'BananaCorp 🍌', price: 120 },
-    { name: 'DuckWare 🦆', price: 80 },
-    { name: 'ToasterInc 🔥', price: 200 },
+    { name: 'BananaCorp \ud83c\udf4c', price: 120, prevPrice: 120 },
+    { name: 'DuckWare \ud83e\udd86', price: 80, prevPrice: 80 },
+    { name: 'ToasterInc \ud83d\udd25', price: 200, prevPrice: 200 },
   ]);
+
+  const [toasts, setToasts] = useState([]);
+
+  const addToast = (text) => {
+    const id = Date.now();
+    setToasts((t) => [...t, { id, text }]);
+    setTimeout(() => {
+      setToasts((t) => t.filter((toast) => toast.id !== id));
+    }, 3000);
+  };
 
   const updateStockPrices = () => {
     setStocks((prev) =>
       prev.map((stock) => {
         const changePct = (Math.random() - 0.5) * 0.2; // -10% to +10%
         const newPrice = Math.max(1, Math.round(stock.price * (1 + changePct)));
-        return { ...stock, price: newPrice };
+        return { ...stock, prevPrice: stock.price, price: newPrice };
       })
     );
   };
@@ -97,6 +108,9 @@ function App() {
     if (balance >= stock.price) {
       setBalance((b) => b - stock.price);
       setPortfolio((p) => ({ ...p, [stockName]: (p[stockName] || 0) + 1 }));
+      addToast(`Bought 1 ${stockName} for ${stock.price}\u00A2`);
+    } else {
+      addToast(`Not enough balance to buy ${stockName}`);
     }
   };
 
@@ -105,6 +119,9 @@ function App() {
       const stock = stocks.find((s) => s.name === stockName);
       setBalance((b) => b + stock.price);
       setPortfolio((p) => ({ ...p, [stockName]: p[stockName] - 1 }));
+      addToast(`Sold 1 ${stockName} for ${stock.price}\u00A2`);
+    } else {
+      addToast(`No ${stockName} stock to sell`);
     }
   };
 
@@ -124,9 +141,11 @@ function App() {
         <StockList
           stocks={stocks}
           portfolio={portfolio}
+          balance={balance}
           onBuy={handleBuy}
           onSell={handleSell}
         />
+        <ToastContainer toasts={toasts} />
         <Footer />
       </div>
     </div>
