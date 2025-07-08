@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import BalanceDisplay from './components/BalanceDisplay';
+import PortfolioValueDisplay from './components/PortfolioValueDisplay';
 import StockList from './components/StockList';
 import StockCount from './components/StockCount';
 import Header from './components/Header';
@@ -65,6 +66,7 @@ function App() {
       <div className="w-full max-w-3xl">
         <Header />
         <BalanceDisplay balance={balance} />
+        <PortfolioValueDisplay stocks={stocks} portfolio={portfolio} />
         <StockCount count={stocks.length} />
         <StockList
           stocks={stocks}

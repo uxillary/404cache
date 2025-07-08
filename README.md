@@ -1,6 +1,6 @@
 # 404Cache Stock Market Demo
 
-This project uses Vite and React to showcase the early MVP for the 404Cache stock market game. Prices update automatically and you can buy or sell fictional stocks to watch your balance change.
+This project uses Vite and React to showcase the early MVP for the 404Cache stock market game. Prices update automatically and you can buy or sell fictional stocks to watch your balance change. A running total of your portfolio value is displayed under your balance.
 
 ## Data Persistence
 
