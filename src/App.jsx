@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import BalanceDisplay from './components/BalanceDisplay';
 import StockList from './components/StockList';
 import StockCount from './components/StockCount';
@@ -8,22 +8,42 @@ import './index.css';
 
 function App() {
   const [balance, setBalance] = useState(5000);
-  const [stocks] = useState([
+  const [portfolio, setPortfolio] = useState({});
+  const [stocks, setStocks] = useState([
     { name: 'BananaCorp 🍌', price: 120 },
     { name: 'DuckWare 🦆', price: 80 },
     { name: 'ToasterInc 🔥', price: 200 },
   ]);
 
+  const updateStockPrices = () => {
+    setStocks((prev) =>
+      prev.map((stock) => {
+        const changePct = (Math.random() - 0.5) * 0.2; // -10% to +10%
+        const newPrice = Math.max(1, Math.round(stock.price * (1 + changePct)));
+        return { ...stock, price: newPrice };
+      })
+    );
+  };
+
+  useEffect(() => {
+    const id = setInterval(updateStockPrices, 5000);
+    return () => clearInterval(id);
+  }, []);
+
   const handleBuy = (stockName) => {
     const stock = stocks.find((s) => s.name === stockName);
     if (balance >= stock.price) {
-      setBalance(balance - stock.price);
+      setBalance((b) => b - stock.price);
+      setPortfolio((p) => ({ ...p, [stockName]: (p[stockName] || 0) + 1 }));
     }
   };
 
   const handleSell = (stockName) => {
-    const stock = stocks.find((s) => s.name === stockName);
-    setBalance(balance + stock.price);
+    if (portfolio[stockName] > 0) {
+      const stock = stocks.find((s) => s.name === stockName);
+      setBalance((b) => b + stock.price);
+      setPortfolio((p) => ({ ...p, [stockName]: p[stockName] - 1 }));
+    }
   };
 
   return (
@@ -32,7 +52,12 @@ function App() {
         <Header />
         <BalanceDisplay balance={balance} />
         <StockCount count={stocks.length} />
-        <StockList stocks={stocks} onBuy={handleBuy} onSell={handleSell} />
+        <StockList
+          stocks={stocks}
+          portfolio={portfolio}
+          onBuy={handleBuy}
+          onSell={handleSell}
+        />
         <Footer />
       </div>
     </div>
