@@ -1,10 +1,16 @@
 import StockCard from './StockCard';
 
-function StockList({ stocks, onBuy, onSell }) {
+function StockList({ stocks, portfolio, onBuy, onSell }) {
   return (
     <div>
       {stocks.map((stock) => (
-        <StockCard key={stock.name} stock={stock} onBuy={onBuy} onSell={onSell} />
+        <StockCard
+          key={stock.name}
+          stock={stock}
+          owned={portfolio[stock.name] || 0}
+          onBuy={onBuy}
+          onSell={onSell}
+        />
       ))}
     </div>
   );

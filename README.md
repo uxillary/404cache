@@ -1,6 +1,6 @@
-# React + Vite
+# 404Cache Stock Market Demo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project uses Vite and React to showcase the early MVP for the 404Cache stock market game. Prices update automatically and you can buy or sell fictional stocks to watch your balance change.
 
 Currently, two official plugins are available:
 
