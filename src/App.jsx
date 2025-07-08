@@ -4,11 +4,15 @@ import PortfolioValueDisplay from './components/PortfolioValueDisplay';
 import StockList from './components/StockList';
 import StockCount from './components/StockCount';
 import PassiveIncomeDisplay from './components/PassiveIncomeDisplay';
+import UpgradeShop from './components/UpgradeShop';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import './index.css';
 
 function App() {
+  const upgrades = [
+    { id: 'upgrade_income', name: 'Faster Income', cost: 1000, bonus: 1 },
+  ];
   const [balance, setBalance] = useState(() => {
     const stored = localStorage.getItem('balance');
     return stored ? JSON.parse(stored) : 5000;
@@ -17,7 +21,14 @@ function App() {
     const stored = localStorage.getItem('portfolio');
     return stored ? JSON.parse(stored) : {};
   });
-  const [passiveRate] = useState(5); // currency earned every 10 seconds
+  const [passiveRate, setPassiveRate] = useState(() => {
+    const stored = localStorage.getItem('passiveRate');
+    return stored ? JSON.parse(stored) : 5;
+  });
+  const [purchasedUpgrades, setPurchasedUpgrades] = useState(() => {
+    const stored = localStorage.getItem('purchasedUpgrades');
+    return stored ? JSON.parse(stored) : [];
+  });
   const [passiveEarned, setPassiveEarned] = useState(() => {
     const stored = localStorage.getItem('passiveEarned');
     return stored ? JSON.parse(stored) : 0;
@@ -63,6 +74,24 @@ function App() {
     localStorage.setItem('passiveEarned', JSON.stringify(passiveEarned));
   }, [passiveEarned]);
 
+  useEffect(() => {
+    localStorage.setItem('passiveRate', JSON.stringify(passiveRate));
+  }, [passiveRate]);
+
+  useEffect(() => {
+    localStorage.setItem('purchasedUpgrades', JSON.stringify(purchasedUpgrades));
+  }, [purchasedUpgrades]);
+
+  const handlePurchaseUpgrade = (id) => {
+    const upgrade = upgrades.find((u) => u.id === id);
+    if (!upgrade) return;
+    if (balance >= upgrade.cost && !purchasedUpgrades.includes(id)) {
+      setBalance((b) => b - upgrade.cost);
+      setPurchasedUpgrades((u) => [...u, id]);
+      setPassiveRate((r) => r + upgrade.bonus);
+    }
+  };
+
   const handleBuy = (stockName) => {
     const stock = stocks.find((s) => s.name === stockName);
     if (balance >= stock.price) {
@@ -87,6 +116,11 @@ function App() {
         <PassiveIncomeDisplay rate={passiveRate} earned={passiveEarned} />
         <PortfolioValueDisplay stocks={stocks} portfolio={portfolio} />
         <StockCount count={stocks.length} />
+        <UpgradeShop
+          upgrades={upgrades}
+          purchased={purchasedUpgrades}
+          onPurchase={handlePurchaseUpgrade}
+        />
         <StockList
           stocks={stocks}
           portfolio={portfolio}
