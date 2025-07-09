@@ -15,7 +15,7 @@ body,
   padding: 0;
   width: 100%;
   min-height: 100%;
-  background: radial-gradient(circle at 50% 0, #022, #000);
+  background: radial-gradient(circle at 50% 0, #034, #000);
   color: #0ff;
   font-family: 'Share Tech Mono', monospace;
 }
@@ -97,7 +97,7 @@ button:focus-visible {
 
 /* for placeholder */
 :root {
-  --bg-color: radial-gradient(circle at 50% 0, #022, #000);
+  --bg-color: radial-gradient(circle at 50% 0, #034, #000);
   --text-color: #0ff;
   --font-family: 'Share Tech Mono', monospace;
 }
