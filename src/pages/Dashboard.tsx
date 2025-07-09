@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { updateStockPrices } from '../utils/stockSimulator';
+import stockLimits from '../data/stockLimits.json';
 import PortfolioChart from '../components/PortfolioChart';
 import BalanceDisplay from '../components/BalanceDisplay';
 import PortfolioValueDisplay from '../components/PortfolioValueDisplay';
@@ -51,6 +52,27 @@ function Dashboard() {
   const [passiveEarned, setPassiveEarned] = useState(() => {
     const stored = getItem<number>('passiveEarned');
     return stored ?? 0;
+  });
+  const [globalSupply, setGlobalSupply] = useState(() => {
+    const stored = getItem<Record<string, number>>('globalSupply');
+    if (stored) return stored;
+    const supply: Record<string, number> = {};
+    INITIAL_STOCKS.forEach((s) => {
+      supply[s.name] = stockLimits[s.name].globalLimit;
+    });
+    return supply;
+  });
+  const [playerLimits] = useState(() => {
+    const stored = getItem<Record<string, number>>('perPlayerLimits');
+    if (stored) return stored;
+    const limits: Record<string, number> = {};
+    Object.entries(stockLimits).forEach(([name, info]) => {
+      if (info.perPlayerLimit !== undefined) {
+        limits[name] = info.perPlayerLimit;
+      }
+    });
+    setItem('perPlayerLimits', limits);
+    return limits;
   });
   const [stocks, setStocks] = useState(
     INITIAL_STOCKS.map((s) => ({ ...s }))
@@ -135,6 +157,10 @@ function Dashboard() {
   }, [passiveEarned]);
 
   useEffect(() => {
+    setItem('globalSupply', globalSupply);
+  }, [globalSupply]);
+
+  useEffect(() => {
     const portfolioValue = stocks.reduce((sum, stock) => {
       const owned = portfolio[stock.name] || 0;
       return sum + owned * stock.price;
@@ -167,9 +193,24 @@ function Dashboard() {
 
   const handleBuy = (stockName) => {
     const stock = stocks.find((s) => s.name === stockName);
+    const remaining = globalSupply[stockName];
+    const limit = playerLimits[stockName];
+    const owned = portfolio[stockName] || 0;
+
+    if (remaining <= 0) {
+      addToast(`${stockName} is sold out`);
+      return;
+    }
+
+    if (limit !== undefined && owned >= limit) {
+      addToast(`You reached the cap for ${stockName}`);
+      return;
+    }
+
     if (balance >= stock.price) {
       setBalance((b) => b - stock.price);
-      setPortfolio((p) => ({ ...p, [stockName]: (p[stockName] || 0) + 1 }));
+      setPortfolio((p) => ({ ...p, [stockName]: owned + 1 }));
+      setGlobalSupply((s) => ({ ...s, [stockName]: s[stockName] - 1 }));
       addToast(`Bought 1 ${stockName} for ${stock.price}\u00A2`);
       confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
     } else {
@@ -182,6 +223,7 @@ function Dashboard() {
       const stock = stocks.find((s) => s.name === stockName);
       setBalance((b) => b + stock.price);
       setPortfolio((p) => ({ ...p, [stockName]: p[stockName] - 1 }));
+      setGlobalSupply((s) => ({ ...s, [stockName]: s[stockName] + 1 }));
       addToast(`Sold 1 ${stockName} for ${stock.price}\u00A2`);
     } else {
       addToast(`No ${stockName} stock to sell`);
@@ -198,6 +240,13 @@ function Dashboard() {
     setLoginStreak(1);
     setHistory([]);
     setStocks(INITIAL_STOCKS.map((s) => ({ ...s })));
+    setGlobalSupply(() => {
+      const supply: Record<string, number> = {};
+      INITIAL_STOCKS.forEach((s) => {
+        supply[s.name] = stockLimits[s.name].globalLimit;
+      });
+      return supply;
+    });
     removeItem('balance');
     removeItem('portfolio');
     removeItem('passiveRate');
@@ -206,6 +255,7 @@ function Dashboard() {
     removeItem('netWorthHistory');
     removeItem('loginStreak');
     removeItem('lastLoginDate');
+    removeItem('globalSupply');
   };
 
   const portfolioValue = stocks.reduce((sum, stock) => {
@@ -231,6 +281,7 @@ function Dashboard() {
       if (count > 0) {
         earned += count * s.price;
         newPortfolio[s.name] = 0;
+        setGlobalSupply((g) => ({ ...g, [s.name]: g[s.name] + count }));
       }
     });
     if (earned > 0) {
@@ -274,6 +325,8 @@ function Dashboard() {
             stocks={filteredStocks}
             portfolio={portfolio}
             balance={balance}
+            supply={globalSupply}
+            limits={stockLimits}
             onBuy={handleBuy}
             onSell={handleSell}
           />

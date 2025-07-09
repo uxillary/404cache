@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function StockCard({ stock, owned, balance, onBuy, onSell }) {
+function StockCard({ stock, owned, balance, remaining, limit, onBuy, onSell }) {
   const [bouncing, setBouncing] = useState(false);
 
   const handleBuy = () => {
@@ -51,11 +51,18 @@ function StockCard({ stock, owned, balance, onBuy, onSell }) {
           </span>
         )}
       </div>
+      <div className="text-green-400 text-xs">Remaining: {remaining}</div>
+      {limit !== undefined && (
+        <div className="text-yellow-300 text-xs">Limit: {limit}</div>
+      )}
+      {limit !== undefined && owned >= limit && (
+        <div className="text-red-400 text-xs">Cap reached</div>
+      )}
       <div className="flex gap-2">
         <button
           onClick={handleBuy}
           className={`bg-green-700 hover:bg-green-900 text-white px-3 py-1 rounded disabled:opacity-50 ${bouncing ? 'animate-bounce-small' : ''}`}
-          disabled={balance < stock.price}
+          disabled={balance < stock.price || remaining <= 0 || (limit !== undefined && owned >= limit)}
         >
           Buy
         </button>

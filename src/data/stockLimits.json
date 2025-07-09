@@ -1,0 +1,8 @@
+{
+  "BananaCorp": { "globalLimit": 100, "perPlayerLimit": 25 },
+  "DuckWare": { "globalLimit": 80 },
+  "ToasterInc": { "globalLimit": 60, "perPlayerLimit": 10 },
+  "SpaceY": { "globalLimit": 50 },
+  "LlamaSoft": { "globalLimit": 70, "perPlayerLimit": 15 },
+  "Robotix": { "globalLimit": 40 }
+}

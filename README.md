@@ -22,6 +22,11 @@ Your best score is now saved locally and shown below the start button.
 The Market window now includes a search bar to quickly filter stocks by name.
 When text is entered, a **Clear** button appears to reset the filter in one click.
 
+## Stock Scarcity
+
+Each stock now has a global supply and optional per-player cap. Remaining shares
+are shown on every stock card and purchases are blocked when limits are reached.
+
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
