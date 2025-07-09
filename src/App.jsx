@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import PortfolioChart from './components/PortfolioChart';
 import BalanceDisplay from './components/BalanceDisplay';
 import PortfolioValueDisplay from './components/PortfolioValueDisplay';
+import NetWorthDisplay from './components/NetWorthDisplay';
 import StockList from './components/StockList';
 import StockCount from './components/StockCount';
 import PassiveIncomeDisplay from './components/PassiveIncomeDisplay';
@@ -203,6 +204,7 @@ function App() {
         <LoginStreakDisplay streak={loginStreak} />
         <PassiveIncomeDisplay rate={passiveRate} earned={passiveEarned} />
         <PortfolioValueDisplay stocks={stocks} portfolio={portfolio} />
+        <NetWorthDisplay balance={balance} stocks={stocks} portfolio={portfolio} />
         <PortfolioChart data={history} />
         <StockCount count={stocks.length} />
         <UpgradeShop
