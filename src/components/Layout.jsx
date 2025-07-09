@@ -7,7 +7,7 @@ function Layout({ children, sidebar }) {
     <div className="min-h-screen flex bg-black text-green-300 font-mono crt-effect">
       {sidebar && React.cloneElement(sidebar, { className: `${sidebar.props.className ?? ''} hidden lg:block` })}
       <div className="flex-1 p-4 md:p-8">
-        <div className="max-w-3xl mx-auto">{children}</div>
+        <div className="max-w-5xl mx-auto">{children}</div>
       </div>
       {sidebar && (
         <>
@@ -19,7 +19,7 @@ function Layout({ children, sidebar }) {
           </button>
           {showMobileSidebar && (
             <div className="lg:hidden fixed inset-0 z-30 flex">
-              <div className="w-56 bg-black/90 border-r border-green-600 p-4 overflow-y-auto">
+              <div className="w-40 bg-black/90 border-r border-green-600 p-4 overflow-y-auto">
                 <button
                   onClick={() => setShowMobileSidebar(false)}
                   className="mb-4 bg-red-700 hover:bg-red-900 text-white px-2 py-1 rounded w-full"
