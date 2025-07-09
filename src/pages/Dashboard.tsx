@@ -18,22 +18,25 @@ import Layout from '../components/Layout';
 import Sidebar from '../components/Sidebar';
 import WindowFrame from '../components/WindowFrame';
 import StockFilter from '../components/StockFilter';
+import TerminalModeToggle from '../components/TerminalModeToggle';
+import PortfolioSummaryBar from '../components/PortfolioSummaryBar';
+import CommandSidebar from '../components/CommandSidebar';
 import confetti from "canvas-confetti";
 import { getItem, setItem, removeItem } from "../lib/storage";
 
 const INITIAL_STOCKS = [
-  { name: 'BananaCorp', emoji: '🍌', price: 120, prevPrice: 120, type: 'stable' },
-  { name: 'DuckWare', emoji: '🦆', price: 80, prevPrice: 80, type: 'risky' },
-  { name: 'ToasterInc', emoji: '🔥', price: 200, prevPrice: 200, type: 'trending' },
-  { name: 'SpaceY', emoji: '🚀', price: 250, prevPrice: 250, type: 'risky' },
-  { name: 'LlamaSoft', emoji: '🦙', price: 150, prevPrice: 150, type: 'stable' },
-  { name: 'Robotix', emoji: '🤖', price: 180, prevPrice: 180, type: 'trending' },
+  { name: 'BananaCorp', emoji: '🍌', price: 120, prevPrice: 120, type: 'stable', history: [120] },
+  { name: 'DuckWare', emoji: '🦆', price: 80, prevPrice: 80, type: 'risky', history: [80] },
+  { name: 'ToasterInc', emoji: '🔥', price: 200, prevPrice: 200, type: 'trending', history: [200] },
+  { name: 'SpaceY', emoji: '🚀', price: 250, prevPrice: 250, type: 'risky', history: [250] },
+  { name: 'LlamaSoft', emoji: '🦙', price: 150, prevPrice: 150, type: 'stable', history: [150] },
+  { name: 'Robotix', emoji: '🤖', price: 180, prevPrice: 180, type: 'trending', history: [180] },
 ];
 
 const RARE_MARKETS = {
   cyber: [
-    { name: 'CyberDyne', emoji: '💻', price: 300, prevPrice: 300, type: 'rare' },
-    { name: 'MystiCorp', emoji: '🧪', price: 400, prevPrice: 400, type: 'rare' },
+    { name: 'CyberDyne', emoji: '💻', price: 300, prevPrice: 300, type: 'rare', history: [300] },
+    { name: 'MystiCorp', emoji: '🧪', price: 400, prevPrice: 400, type: 'rare', history: [400] },
   ],
 };
 
@@ -78,6 +81,9 @@ function Dashboard() {
   const [loginStreak, setLoginStreak] = useState(1);
 
   const [search, setSearch] = useState('');
+
+  const [terminalMode, setTerminalMode] = useState(() => getItem<boolean>('terminalMode') === 'true');
+  const [showCmd, setShowCmd] = useState(false);
 
   const addToast = (message, type = 'info') => {
     toast(message, { type });
@@ -331,6 +337,7 @@ function Dashboard() {
     return sum + owned * stock.price * portfolioBonus;
   }, 0);
   const netWorth = balance + portfolioValue;
+  const changePct = history.length > 1 ? (((netWorth - history[0]) / history[0]) * 100).toFixed(2) : '0.00';
 
   const filteredStocks = stocks.filter((s) =>
     s.name.toLowerCase().includes(search.toLowerCase())
@@ -360,6 +367,18 @@ function Dashboard() {
       playSound('sell');
       addToast(`Sold all stock for ${earned}\u00A2`, 'success');
       flash();
+    }
+  };
+
+  const handleCommand = (cmd) => {
+    const parts = cmd.trim().split(/\s+/);
+    const action = parts[0]?.toUpperCase();
+    const name = parts[1];
+    const qty = parseInt(parts[2], 10) || 1;
+    if (action === 'BUY') {
+      for (let i = 0; i < qty; i++) handleBuy(name);
+    } else if (action === 'SELL') {
+      for (let i = 0; i < qty; i++) handleSell(name);
     }
   };
 
@@ -401,7 +420,10 @@ function Dashboard() {
           />
         </WindowFrame>
         <WindowFrame title="Market">
-          <StockFilter search={search} onSearch={setSearch} />
+          <div className="flex justify-between items-center mb-2">
+            <StockFilter search={search} onSearch={setSearch} />
+            <TerminalModeToggle onToggle={setTerminalMode} />
+          </div>
           <StockList
             stocks={filteredStocks}
             portfolio={portfolio}
@@ -410,11 +432,21 @@ function Dashboard() {
             onSell={handleSell}
             limits={limits}
             globalOwned={globalOwned}
+            terminalMode={terminalMode}
           />
         </WindowFrame>
         <Footer onReset={resetGame} />
         <ToastContainer />
       </div>
+      <PortfolioSummaryBar
+        value={netWorth}
+        passiveRate={passiveRate * 6}
+        changePct={changePct}
+        onCmdToggle={() => setShowCmd(true)}
+      />
+      {showCmd && (
+        <CommandSidebar onCommand={handleCommand} onClose={() => setShowCmd(false)} />
+      )}
     </Layout>
   );
 }

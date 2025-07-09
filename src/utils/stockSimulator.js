@@ -30,6 +30,7 @@ export function updateStockPrices(stocks) {
       event = spikeUp ? 'spike-up' : 'spike-down';
     }
 
-    return { ...stock, prevPrice: stock.price, price: newPrice, event };
+    const hist = stock.history ? [...stock.history, newPrice].slice(-10) : [stock.price, newPrice];
+    return { ...stock, prevPrice: stock.price, price: newPrice, event, history: hist };
   });
 }
