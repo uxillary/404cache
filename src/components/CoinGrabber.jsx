@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getItem, setItem } from '../lib/storage';
 
 function CoinGrabber() {
@@ -7,19 +7,23 @@ function CoinGrabber() {
   const [timeLeft, setTimeLeft] = useState(20);
   const [earned, setEarned] = useState(0);
 
+  const stopGame = useCallback(() => {
+    setRunning(false);
+    const balance = getItem('balance') ?? 0;
+    setItem('balance', balance + earned);
+  }, [earned]);
+
   useEffect(() => {
     let timerId;
     if (running) {
       if (timeLeft > 0) {
         timerId = setTimeout(() => setTimeLeft((t) => t - 1), 1000);
       } else {
-        setRunning(false);
-        const balance = getItem('balance') ?? 0;
-        setItem('balance', balance + earned);
+        stopGame();
       }
     }
     return () => clearTimeout(timerId);
-  }, [running, timeLeft, earned]);
+  }, [running, timeLeft, earned, stopGame]);
 
   useEffect(() => {
     let spawnId;
@@ -27,9 +31,9 @@ function CoinGrabber() {
       spawnId = setInterval(spawnCoin, 700);
     }
     return () => clearInterval(spawnId);
-  }, [running]);
+  }, [running, spawnCoin]);
 
-  const spawnCoin = () => {
+  const spawnCoin = useCallback(() => {
     const id = Date.now() + Math.random();
     const x = Math.random() * 90;
     const y = Math.random() * 80 + 5;
@@ -37,7 +41,7 @@ function CoinGrabber() {
     setTimeout(() => {
       setCoins((c) => c.filter((coin) => coin.id !== id));
     }, 1500);
-  };
+  }, []);
 
   const collectCoin = (id) => {
     setCoins((c) => c.filter((coin) => coin.id !== id));
@@ -52,7 +56,7 @@ function CoinGrabber() {
   };
 
   return (
-    <div className="mt-6 relative h-96 border border-green-500 bg-black/60 rounded">
+    <div className="mt-6 relative h-96 border border-green-500 bg-black/80 rounded">
       {!running && (
         <div className="flex flex-col items-center justify-center h-full space-y-4">
           <button
@@ -62,14 +66,22 @@ function CoinGrabber() {
             Start Coin Grabber
           </button>
           {earned > 0 && (
-            <div className="text-green-300">You earned {earned}₵!</div>
+            <div className="text-green-300">Game over! You earned {earned}₵</div>
           )}
         </div>
       )}
       {running && (
-        <div className="p-2 text-green-300">
-          Time: {timeLeft}s | Earned: {earned}₵
-        </div>
+        <>
+          <button
+            onClick={stopGame}
+            className="absolute top-2 right-2 bg-red-700 hover:bg-red-900 text-white px-2 py-1 rounded"
+          >
+            Stop
+          </button>
+          <div className="p-2 text-green-300">
+            Time: {timeLeft}s | Earned: {earned}₵
+          </div>
+        </>
       )}
       {coins.map((coin) => (
         <div
