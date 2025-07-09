@@ -11,7 +11,7 @@ function WindowFrame({ title, children }) {
           <span className="inline-block w-3 h-3 bg-green-500 rounded-full" />
         </div>
       </div>
-      <div className="p-4">
+      <div className="p-4 sm:p-6 lg:p-8">
         {children}
       </div>
     </div>
