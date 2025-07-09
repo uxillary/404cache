@@ -2,7 +2,7 @@ import React from 'react'
 
 function Sidebar({ balance, netWorth, onRandomBuy, onSellAll, onReset, className = '' }) {
   return (
-    <aside className={`w-56 bg-black/80 border-r border-green-600 p-4 font-mono text-green-300 ${className}`}>
+    <aside className={`w-40 bg-black/80 border-r border-green-600 p-4 font-mono text-green-300 ${className}`}>
       <h2 className="text-green-400 mb-3">&gt; Tools</h2>
       <div className="space-y-2 text-sm">
         <div>Balance: {balance}₵</div>
