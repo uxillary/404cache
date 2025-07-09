@@ -11,6 +11,8 @@ import UpgradeShop from '../components/UpgradeShop';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ToastContainer from '../components/ToastContainer';
+import { toast } from 'react-toastify';
+import { playSound } from '../utils/sfx';
 import LoginStreakDisplay from '../components/LoginStreakDisplay';
 import Layout from '../components/Layout';
 import Sidebar from '../components/Sidebar';
@@ -77,11 +79,17 @@ function Dashboard() {
 
   const [search, setSearch] = useState('');
 
-  const [toasts, setToasts] = useState([]);
-
-  const removeToast = (id: number) => {
-    setToasts((t) => t.filter((toast) => toast.id !== id));
+  const addToast = (message, type = 'info') => {
+    toast(message, { type });
   };
+
+  const flash = () => {
+    document.body.classList.add('glitch-flash');
+    setTimeout(() => {
+      document.body.classList.remove('glitch-flash');
+    }, 200);
+  };
+
 
   const [limits, setLimits] = useState({});
   const [globalOwned, setGlobalOwned] = useState(() => {
@@ -89,13 +97,6 @@ function Dashboard() {
     return stored ?? {};
   });
 
-  const addToast = (text) => {
-    const id = Date.now();
-    setToasts((t) => [...t, { id, text }]);
-    setTimeout(() => {
-      removeToast(id);
-    }, 3000);
-  };
 
   const updateStockPricesWrapper = () => {
     setStocks((prev) => updateStockPrices(prev));
@@ -157,6 +158,7 @@ function Dashboard() {
 
     if (reward) {
       setBalance((b) => b + reward);
+      playSound('beep');
       addToast(`Daily login bonus! +${reward}\u00A2 (Streak ${newStreak})`);
     }
   }, []);
@@ -242,6 +244,9 @@ function Dashboard() {
         default:
           break;
       }
+      playSound('upgrade');
+      addToast(`${upgrade.name} purchased!`, 'success');
+      flash();
     }
   };
 
@@ -267,8 +272,10 @@ function Dashboard() {
         const updated = { ...g, [stockName]: globalCount + 1 };
         return updated;
       });
-      addToast(`Bought 1 ${stockName} for ${stock.price}\u00A2`);
+      playSound('buy');
+      addToast(`Bought 1 ${stockName} for ${stock.price}\u00A2`, 'success');
       confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+      flash();
     } else {
       addToast(`Not enough balance to buy ${stockName}`);
     }
@@ -285,7 +292,9 @@ function Dashboard() {
         const updated = { ...g, [stockName]: Math.max(0, count) };
         return updated;
       });
-      addToast(`Sold 1 ${stockName} for ${sellPrice}\u00A2`);
+      playSound('sell');
+      addToast(`Sold 1 ${stockName} for ${sellPrice}\u00A2`, 'success');
+      flash();
     } else {
       addToast(`No ${stockName} stock to sell`);
     }
@@ -348,7 +357,9 @@ function Dashboard() {
     if (earned > 0) {
       setPortfolio(newPortfolio);
       setBalance((b) => b + earned);
-      addToast(`Sold all stock for ${earned}\u00A2`);
+      playSound('sell');
+      addToast(`Sold all stock for ${earned}\u00A2`, 'success');
+      flash();
     }
   };
 
@@ -402,7 +413,7 @@ function Dashboard() {
           />
         </WindowFrame>
         <Footer onReset={resetGame} />
-        <ToastContainer toasts={toasts} onClose={removeToast} />
+        <ToastContainer />
       </div>
     </Layout>
   );
