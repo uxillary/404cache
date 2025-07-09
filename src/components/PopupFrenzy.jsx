@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { getItem, setItem } from '../lib/storage';
+import HighScoreDisplay from './HighScoreDisplay';
 
 function PopupFrenzy() {
   const [running, setRunning] = useState(false);
   const [popups, setPopups] = useState([]);
   const [timeLeft, setTimeLeft] = useState(20);
   const [earned, setEarned] = useState(0);
+  const [highScore, setHighScore] = useState(() => getItem('popupHighScore') ?? 0);
 
   useEffect(() => {
     let timerId;
@@ -16,10 +18,14 @@ function PopupFrenzy() {
         setRunning(false);
         const balance = getItem('balance') ?? 0;
         setItem('balance', balance + earned);
+        if (earned > highScore) {
+          setHighScore(earned);
+          setItem('popupHighScore', earned);
+        }
       }
     }
     return () => clearTimeout(timerId);
-  }, [running, timeLeft, earned]);
+  }, [running, timeLeft, earned, highScore]);
 
   useEffect(() => {
     let spawnId;
@@ -62,6 +68,7 @@ function PopupFrenzy() {
           {earned > 0 && (
             <div className="text-green-300">You earned {earned}₵!</div>
           )}
+          <HighScoreDisplay score={highScore} />
         </div>
       )}
       {running && (
