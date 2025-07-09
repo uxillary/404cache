@@ -13,6 +13,9 @@ export function updateStockPrices(stocks) {
         volatility = 0.15; // +/-7.5%
         bias = 0.03; // upward bias
         break;
+      case 'rare':
+        volatility = 0.6; // +/-30%
+        break;
       default:
         break;
     }
