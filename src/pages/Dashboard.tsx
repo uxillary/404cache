@@ -14,30 +14,31 @@ import LoginStreakDisplay from '../components/LoginStreakDisplay';
 import Layout from '../components/Layout';
 import WindowFrame from '../components/WindowFrame';
 import confetti from "canvas-confetti";
+import { getItem, setItem, removeItem } from "../lib/storage";
 
 function Dashboard() {
   const upgrades = [
     { id: 'upgrade_income', name: 'Faster Income', cost: 1000, bonus: 1 },
   ];
   const [balance, setBalance] = useState(() => {
-    const stored = localStorage.getItem('balance');
-    return stored ? JSON.parse(stored) : 5000;
+    const stored = getItem<number>('balance');
+    return stored ?? 5000;
   });
   const [portfolio, setPortfolio] = useState(() => {
-    const stored = localStorage.getItem('portfolio');
-    return stored ? JSON.parse(stored) : {};
+    const stored = getItem<Record<string, number>>('portfolio');
+    return stored ?? {};
   });
   const [passiveRate, setPassiveRate] = useState(() => {
-    const stored = localStorage.getItem('passiveRate');
-    return stored ? JSON.parse(stored) : 5;
+    const stored = getItem<number>('passiveRate');
+    return stored ?? 5;
   });
   const [purchasedUpgrades, setPurchasedUpgrades] = useState(() => {
-    const stored = localStorage.getItem('purchasedUpgrades');
-    return stored ? JSON.parse(stored) : [];
+    const stored = getItem<string[]>('purchasedUpgrades');
+    return stored ?? [];
   });
   const [passiveEarned, setPassiveEarned] = useState(() => {
-    const stored = localStorage.getItem('passiveEarned');
-    return stored ? JSON.parse(stored) : 0;
+    const stored = getItem<number>('passiveEarned');
+    return stored ?? 0;
   });
   const [stocks, setStocks] = useState([
     { name: 'BananaCorp \ud83c\udf4c', price: 120, prevPrice: 120 },
@@ -45,8 +46,8 @@ function Dashboard() {
     { name: 'ToasterInc \ud83d\udd25', price: 200, prevPrice: 200 },
   ]);
   const [history, setHistory] = useState(() => {
-    const stored = localStorage.getItem('netWorthHistory');
-    return stored ? JSON.parse(stored) : [];
+    const stored = getItem<number[]>('netWorthHistory');
+    return stored ?? [];
   });
 
   const [loginStreak, setLoginStreak] = useState(1);
@@ -77,8 +78,8 @@ function Dashboard() {
   }, []);
 
   useEffect(() => {
-    const lastLogin = localStorage.getItem('lastLoginDate');
-    const storedStreak = localStorage.getItem('loginStreak');
+    const lastLogin = getItem<string>('lastLoginDate');
+    const storedStreak = getItem<number>('loginStreak');
     const todayStr = new Date().toDateString();
     let newStreak = 1;
     let reward = 0;
@@ -94,8 +95,8 @@ function Dashboard() {
     }
 
     setLoginStreak(newStreak);
-    localStorage.setItem('lastLoginDate', todayStr);
-    localStorage.setItem('loginStreak', JSON.stringify(newStreak));
+    setItem('lastLoginDate', todayStr);
+    setItem('loginStreak', newStreak);
 
     if (reward) {
       setBalance((b) => b + reward);
@@ -104,7 +105,7 @@ function Dashboard() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('loginStreak', JSON.stringify(loginStreak));
+    setItem('loginStreak', loginStreak);
   }, [loginStreak]);
 
   useEffect(() => {
@@ -116,15 +117,15 @@ function Dashboard() {
   }, [passiveRate]);
 
   useEffect(() => {
-    localStorage.setItem('balance', JSON.stringify(balance));
+    setItem('balance', balance);
   }, [balance]);
 
   useEffect(() => {
-    localStorage.setItem('portfolio', JSON.stringify(portfolio));
+    setItem('portfolio', portfolio);
   }, [portfolio]);
 
   useEffect(() => {
-    localStorage.setItem('passiveEarned', JSON.stringify(passiveEarned));
+    setItem('passiveEarned', passiveEarned);
   }, [passiveEarned]);
 
   useEffect(() => {
@@ -135,17 +136,17 @@ function Dashboard() {
     const netWorth = balance + portfolioValue;
     setHistory((h) => {
       const updated = [...h, netWorth].slice(-20);
-      localStorage.setItem('netWorthHistory', JSON.stringify(updated));
+      setItem('netWorthHistory', updated);
       return updated;
     });
   }, [stocks, balance, portfolio]);
 
   useEffect(() => {
-    localStorage.setItem('passiveRate', JSON.stringify(passiveRate));
+    setItem('passiveRate', passiveRate);
   }, [passiveRate]);
 
   useEffect(() => {
-    localStorage.setItem('purchasedUpgrades', JSON.stringify(purchasedUpgrades));
+    setItem('purchasedUpgrades', purchasedUpgrades);
   }, [purchasedUpgrades]);
 
   const handlePurchaseUpgrade = (id) => {
@@ -192,11 +193,11 @@ function Dashboard() {
       { name: 'DuckWare \ud83e\udd86', price: 80 },
       { name: 'ToasterInc \ud83d\udd25', price: 200 },
     ]);
-    localStorage.removeItem('balance');
-    localStorage.removeItem('portfolio');
-    localStorage.removeItem('passiveRate');
-    localStorage.removeItem('purchasedUpgrades');
-    localStorage.removeItem('passiveEarned');
+    removeItem('balance');
+    removeItem('portfolio');
+    removeItem('passiveRate');
+    removeItem('purchasedUpgrades');
+    removeItem('passiveEarned');
   };
 
   return (
