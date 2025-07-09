@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
+import { getItem, setItem } from '../../lib/storage';
 
 function PopupFrenzy() {
   const [running, setRunning] = useState(false);
   const [popups, setPopups] = useState([]);
   const [timeLeft, setTimeLeft] = useState(20);
   const [score, setScore] = useState(0);
+  const [highScore, setHighScore] = useState(() => getItem('popupHighScore') || 0);
 
   useEffect(() => {
     if (!running) return;
@@ -29,6 +31,18 @@ function PopupFrenzy() {
     return () => clearInterval(id);
   }, [running]);
 
+  useEffect(() => {
+    if (!running && score > 0) {
+      setHighScore((hs) => {
+        if (score > hs) {
+          setItem('popupHighScore', score);
+          return score;
+        }
+        return hs;
+      });
+    }
+  }, [running, score]);
+
   const closePopup = (id) => {
     setPopups((p) => p.filter((pop) => pop.id !== id));
     setScore((s) => s + 1);
@@ -47,6 +61,7 @@ function PopupFrenzy() {
         <div className="flex flex-col items-center justify-center h-full space-y-2">
           <button onClick={startGame} className="neon-button">Start Pop-up Frenzy</button>
           {score > 0 && <div>Score: {score}</div>}
+          {highScore > 0 && <div className="text-yellow-300">Best: {highScore}</div>}
         </div>
       ) : (
         <>
