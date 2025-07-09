@@ -23,6 +23,12 @@ function TopNav() {
           Minigames
         </NavLink>
         <NavLink
+          to="/os"
+          className={({ isActive }) => `${baseClasses} ${isActive ? 'text-cyan-400' : ''}`}
+        >
+          Desktop
+        </NavLink>
+        <NavLink
           to="/profile"
           className={({ isActive }) => `${baseClasses} ${isActive ? 'text-cyan-400' : ''}`}
         >
