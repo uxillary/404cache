@@ -10,9 +10,9 @@ function StockCard({ stock, owned, balance, onBuy, onSell }) {
   };
 
   return (
-    <div className="bg-gradient-to-br from-gray-900 to-gray-800 border border-green-500 p-4 mb-4 sm:mb-0 flex flex-col sm:flex-row justify-between items-start sm:items-center font-mono rounded shadow-lg">
+    <div className="bg-gradient-to-br from-gray-900 to-gray-800 border border-green-500 p-4 mb-4 sm:mb-0 flex flex-col sm:flex-row justify-between items-start sm:items-center font-mono rounded shadow-lg shadow-green-700/30 transition-transform hover:scale-105">
       <div>
-        <div className="text-green-300 text-lg">{stock.name}</div>
+        <div className="text-green-300 text-xl font-bold">{stock.name}</div>
         <div className="text-blue-300 flex items-center">
           Price: {stock.price}₵
           {stock.price !== stock.prevPrice && (
