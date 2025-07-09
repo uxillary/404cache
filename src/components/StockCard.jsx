@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function StockCard({ stock, owned, balance, onBuy, onSell }) {
+function StockCard({ stock, owned, balance, onBuy, onSell, globalRemaining, playerCapReached }) {
   const [bouncing, setBouncing] = useState(false);
 
   const handleBuy = () => {
@@ -51,6 +51,12 @@ function StockCard({ stock, owned, balance, onBuy, onSell }) {
           >
             ⚡
           </span>
+        )}
+      </div>
+      <div className="text-purple-300 text-sm">
+        Remaining: {globalRemaining === Infinity ? '∞' : globalRemaining}
+        {playerCapReached && (
+          <span className="text-red-400 ml-1">Cap reached</span>
         )}
       </div>
       <div className="flex gap-2">
