@@ -31,7 +31,12 @@ function PortfolioChart({ data }) {
   });
 
   return (
-    <svg width={width} height={height + padding} className="mt-4 text-green-400">
+    <div className="overflow-x-auto">
+      <svg
+        width={width}
+        height={height + padding}
+        className="mt-4 text-green-400 min-w-[500px] w-full"
+      >
       <defs>
         <linearGradient id="chart-gradient" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="rgba(34,197,94,0.5)" />
@@ -57,7 +62,8 @@ function PortfolioChart({ data }) {
         <path d={areaPath} fill="url(#chart-gradient)" />
         <path d={linePath} fill="none" stroke="currentColor" strokeWidth="2" />
       </g>
-    </svg>
+      </svg>
+    </div>
   );
 }
 

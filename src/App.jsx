@@ -12,6 +12,7 @@ import Footer from './components/Footer';
 import ToastContainer from './components/ToastContainer';
 import LoginStreakDisplay from './components/LoginStreakDisplay';
 import Layout from './components/Layout';
+import Sidebar from './components/Sidebar';
 import WindowFrame from './components/WindowFrame';
 import confetti from "canvas-confetti";
 import './index.css';
@@ -206,8 +207,46 @@ function App() {
     localStorage.removeItem('passiveEarned');
   };
 
+  const portfolioValue = stocks.reduce((sum, stock) => {
+    const owned = portfolio[stock.name] || 0;
+    return sum + owned * stock.price;
+  }, 0);
+  const netWorth = balance + portfolioValue;
+
+  const handleRandomBuy = () => {
+    const random = stocks[Math.floor(Math.random() * stocks.length)];
+    if (random) handleBuy(random.name);
+  };
+
+  const handleSellAll = () => {
+    let earned = 0;
+    const newPortfolio = { ...portfolio };
+    stocks.forEach((s) => {
+      const count = newPortfolio[s.name] || 0;
+      if (count > 0) {
+        earned += count * s.price;
+        newPortfolio[s.name] = 0;
+      }
+    });
+    if (earned > 0) {
+      setPortfolio(newPortfolio);
+      setBalance((b) => b + earned);
+      addToast(`Sold all stock for ${earned}\u00A2`);
+    }
+  };
+
   return (
-    <Layout>
+    <Layout
+      sidebar={
+        <Sidebar
+          balance={balance}
+          netWorth={netWorth}
+          onRandomBuy={handleRandomBuy}
+          onSellAll={handleSellAll}
+          onReset={resetGame}
+        />
+      }
+    >
       <div className="space-y-6">
         <Header />
         <BalanceDisplay balance={balance} />
