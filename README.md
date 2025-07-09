@@ -4,7 +4,7 @@ This project uses Vite and React to showcase the early MVP for the 404Cache stoc
 
 ## Data Persistence
 
-Your balance, owned stock amounts, passive income rate, and purchased upgrades are stored in **localStorage**, so your progress sticks around between browser sessions.
+Your balance, owned stock amounts, passive income rate, and purchased upgrades are stored in **localStorage** using a `404cache_` prefix, so your progress sticks around between browser sessions.
 
 Currently, two official plugins are available:
 
