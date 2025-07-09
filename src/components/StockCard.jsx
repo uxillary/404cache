@@ -10,7 +10,9 @@ function StockCard({ stock, owned, balance, onBuy, onSell }) {
   };
 
   return (
-    <div className="bg-gradient-to-br from-gray-900 to-gray-800 border border-green-500 p-4 mb-4 sm:mb-0 flex flex-col sm:flex-row justify-between items-start sm:items-center font-mono rounded shadow-lg shadow-green-700/30 transition-transform hover:scale-105">
+    <div
+      className={`bg-gradient-to-br from-gray-900 to-gray-800 border border-green-500 p-4 mb-4 sm:mb-0 flex flex-col sm:flex-row justify-between items-start sm:items-center font-mono rounded shadow-lg shadow-green-700/30 transition-transform hover:scale-105 ${bouncing ? 'glitch-flash' : ''}`}
+    >
       <div>
         <div className="text-green-300 text-xl font-bold">{stock.name}</div>
         <div className="text-blue-300 flex items-center">
@@ -31,14 +33,14 @@ function StockCard({ stock, owned, balance, onBuy, onSell }) {
       <div className="flex gap-2 mt-4 sm:mt-0">
         <button
           onClick={handleBuy}
-          className={`bg-green-700 hover:bg-green-900 text-white px-3 py-1 rounded disabled:opacity-50 ${bouncing ? 'animate-bounce' : ''}`}
+          className={`bg-green-700 hover:bg-green-900 text-white px-3 py-1 rounded disabled:opacity-50 transition-transform duration-200 ease-out ${bouncing ? 'animate-bounce' : ''}`}
           disabled={balance < stock.price}
         >
           Buy
         </button>
         <button
           onClick={() => onSell(stock.name)}
-          className="bg-red-700 hover:bg-red-900 text-white px-3 py-1 rounded disabled:opacity-50"
+          className="bg-red-700 hover:bg-red-900 text-white px-3 py-1 rounded disabled:opacity-50 transition-transform duration-200 ease-out hover:scale-105"
           disabled={owned === 0}
         >
           Sell

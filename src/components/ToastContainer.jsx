@@ -1,15 +1,15 @@
-function ToastContainer({ toasts }) {
+import { ToastContainer as ReactToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+function ToastContainer() {
   return (
-    <div className="fixed top-4 right-4 flex flex-col gap-2 z-50">
-      {toasts.map((toast) => (
-        <div
-          key={toast.id}
-          className="bg-gray-800 border border-green-400 text-green-300 px-4 py-2 rounded shadow"
-        >
-          {toast.text}
-        </div>
-      ))}
-    </div>
+    <ReactToastContainer
+      position="bottom-left"
+      hideProgressBar
+      closeOnClick
+      className="z-50"
+      toastClassName="bg-black text-lime-400 border border-green-500 shadow-md"
+    />
   );
 }
 
