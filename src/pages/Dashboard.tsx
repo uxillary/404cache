@@ -17,6 +17,15 @@ import WindowFrame from '../components/WindowFrame';
 import confetti from "canvas-confetti";
 import { getItem, setItem, removeItem } from "../lib/storage";
 
+const INITIAL_STOCKS = [
+  { name: 'BananaCorp', emoji: '🍌', price: 120, prevPrice: 120 },
+  { name: 'DuckWare', emoji: '🦆', price: 80, prevPrice: 80 },
+  { name: 'ToasterInc', emoji: '🔥', price: 200, prevPrice: 200 },
+  { name: 'SpaceY', emoji: '🚀', price: 250, prevPrice: 250 },
+  { name: 'LlamaSoft', emoji: '🦙', price: 150, prevPrice: 150 },
+  { name: 'Robotix', emoji: '🤖', price: 180, prevPrice: 180 },
+];
+
 function Dashboard() {
   const upgrades = [
     { id: 'upgrade_income', name: 'Faster Income', cost: 1000, bonus: 1 },
@@ -41,11 +50,9 @@ function Dashboard() {
     const stored = getItem<number>('passiveEarned');
     return stored ?? 0;
   });
-  const [stocks, setStocks] = useState([
-    { name: 'BananaCorp \ud83c\udf4c', price: 120, prevPrice: 120 },
-    { name: 'DuckWare \ud83e\udd86', price: 80, prevPrice: 80 },
-    { name: 'ToasterInc \ud83d\udd25', price: 200, prevPrice: 200 },
-  ]);
+  const [stocks, setStocks] = useState(
+    INITIAL_STOCKS.map((s) => ({ ...s }))
+  );
   const [history, setHistory] = useState(() => {
     const stored = getItem<number[]>('netWorthHistory');
     return stored ?? [];
@@ -189,11 +196,7 @@ function Dashboard() {
     setPassiveRate(5);
     setPurchasedUpgrades([]);
     setPassiveEarned(0);
-    setStocks([
-      { name: 'BananaCorp \ud83c\udf4c', price: 120 },
-      { name: 'DuckWare \ud83e\udd86', price: 80 },
-      { name: 'ToasterInc \ud83d\udd25', price: 200 },
-    ]);
+    setStocks(INITIAL_STOCKS.map((s) => ({ ...s })));
     removeItem('balance');
     removeItem('portfolio');
     removeItem('passiveRate');
