@@ -10,25 +10,28 @@ function StockCard({ stock, owned, balance, onBuy, onSell }) {
   };
 
   return (
-    <div className="bg-gradient-to-br from-gray-900 to-gray-800 border border-green-500 p-4 mb-4 sm:mb-0 flex flex-col sm:flex-row justify-between items-start sm:items-center font-mono rounded shadow-lg shadow-green-700/30 transition-transform hover:scale-105">
-      <div>
-        <div className="text-green-300 text-xl font-bold">{stock.name}</div>
-        <div className="text-blue-300 flex items-center">
-          Price: {stock.price}₵
-          {stock.price !== stock.prevPrice && (
-            <span
-              className={`ml-2 text-sm ${
-                stock.price > stock.prevPrice ? 'text-green-400' : 'text-red-400'
-              }`}
-            >
-              {stock.price > stock.prevPrice ? '▲' : '▼'}
-              {Math.abs(stock.price - stock.prevPrice)}₵
-            </span>
-          )}
+    <div className="bg-gradient-to-br from-gray-900 to-gray-800 border border-green-500 p-4 mb-4 rounded shadow-lg shadow-green-700/30 transition-transform hover:scale-105 flex flex-col gap-2 font-mono">
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <span className="text-3xl">{stock.emoji}</span>
+          <div className="text-green-300 text-xl font-bold">{stock.name}</div>
         </div>
         <div className="text-yellow-300">Owned: {owned}</div>
       </div>
-      <div className="flex gap-2 mt-4 sm:mt-0">
+      <div className="text-blue-300 flex items-center">
+        Price: {stock.price}₵
+        {stock.price !== stock.prevPrice && (
+          <span
+            className={`ml-2 text-sm ${
+              stock.price > stock.prevPrice ? 'text-green-400' : 'text-red-400'
+            }`}
+          >
+            {stock.price > stock.prevPrice ? '▲' : '▼'}
+            {Math.abs(stock.price - stock.prevPrice)}₵
+          </span>
+        )}
+      </div>
+      <div className="flex gap-2">
         <button
           onClick={handleBuy}
           className={`bg-green-700 hover:bg-green-900 text-white px-3 py-1 rounded disabled:opacity-50 ${bouncing ? 'animate-bounce-small' : ''}`}
