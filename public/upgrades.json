@@ -1,0 +1,30 @@
+[
+  {
+    "id": "upgrade_income_add",
+    "name": "Faster Income",
+    "type": "passive_add",
+    "value": 1,
+    "cost": 1000
+  },
+  {
+    "id": "upgrade_portfolio_5",
+    "name": "Portfolio Boost +5%",
+    "type": "portfolio_mult",
+    "value": 1.05,
+    "cost": 1500
+  },
+  {
+    "id": "upgrade_income_mult",
+    "name": "Passive Income +20%",
+    "type": "passive_mult",
+    "value": 1.2,
+    "cost": 2000
+  },
+  {
+    "id": "unlock_rare_markets",
+    "name": "Unlock Rare Markets",
+    "type": "unlock_market",
+    "value": "cyber",
+    "cost": 5000
+  }
+]

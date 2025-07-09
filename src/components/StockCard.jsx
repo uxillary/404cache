@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function StockCard({ stock, owned, balance, onBuy, onSell }) {
+function StockCard({ stock, owned, balance, onBuy, onSell, globalRemaining, playerCapReached }) {
   const [bouncing, setBouncing] = useState(false);
 
   const handleBuy = () => {
@@ -11,10 +11,12 @@ function StockCard({ stock, owned, balance, onBuy, onSell }) {
 
   return (
     <div className="bg-gradient-to-br from-gray-900 to-gray-800 border border-green-500 p-4 mb-4 rounded shadow-lg shadow-green-700/30 transition-transform hover:scale-105 flex flex-col gap-2 font-mono">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center gap-2">
+      <div className="flex justify-between items-center flex-wrap gap-y-1">
+        <div className="flex items-center gap-2 flex-wrap">
           <span className="text-3xl">{stock.emoji}</span>
-          <div className="text-green-300 text-xl font-bold">{stock.name}</div>
+          <div className="text-green-300 text-xl font-bold break-words">
+            {stock.name}
+          </div>
           <span
             className={`text-xs px-2 rounded ${
               stock.type === 'stable'
@@ -27,7 +29,7 @@ function StockCard({ stock, owned, balance, onBuy, onSell }) {
             {stock.type}
           </span>
         </div>
-        <div className="text-yellow-300">Owned: {owned}</div>
+        <div className="text-yellow-300 text-sm">Owned: {owned}</div>
       </div>
       <div className="text-blue-300 flex items-center">
         Price: {stock.price}₵
@@ -51,17 +53,23 @@ function StockCard({ stock, owned, balance, onBuy, onSell }) {
           </span>
         )}
       </div>
+      <div className="text-purple-300 text-sm">
+        Remaining: {globalRemaining === Infinity ? '∞' : globalRemaining}
+        {playerCapReached && (
+          <span className="text-red-400 ml-1">Cap reached</span>
+        )}
+      </div>
       <div className="flex gap-2">
         <button
           onClick={handleBuy}
-          className={`bg-green-700 hover:bg-green-900 text-white px-3 py-1 rounded disabled:opacity-50 ${bouncing ? 'animate-bounce-small' : ''}`}
+          className={`bg-green-700 hover:bg-green-900 text-white px-2 py-1 text-sm rounded disabled:opacity-50 ${bouncing ? 'animate-bounce-small' : ''}`}
           disabled={balance < stock.price}
         >
           Buy
         </button>
         <button
           onClick={() => onSell(stock.name)}
-          className="bg-red-700 hover:bg-red-900 text-white px-3 py-1 rounded disabled:opacity-50"
+          className="bg-red-700 hover:bg-red-900 text-white px-2 py-1 text-sm rounded disabled:opacity-50"
           disabled={owned === 0}
         >
           Sell
