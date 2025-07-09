@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
+import SoundToggle from './SoundToggle';
 
 function TopNav() {
   const baseClasses =
@@ -35,6 +36,7 @@ function TopNav() {
         >
           Profile
         </NavLink>
+        <SoundToggle />
         <ThemeToggle />
       </div>
     </nav>
