@@ -10,7 +10,7 @@ function UpgradeShop({ upgrades, purchased, onPurchase }) {
           <button
             onClick={() => onPurchase(u.id)}
             disabled={purchased.includes(u.id)}
-            className="bg-purple-700 hover:bg-purple-900 text-white px-2 py-1 rounded disabled:opacity-50"
+            className="bg-purple-700 hover:bg-purple-900 text-white px-2 py-1 rounded disabled:opacity-50 transition-transform duration-200 ease-out hover:scale-105"
           >
             {purchased.includes(u.id) ? 'Purchased' : 'Buy'}
           </button>
