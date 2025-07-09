@@ -66,6 +66,10 @@ function Dashboard() {
 
   const [toasts, setToasts] = useState([]);
 
+  const removeToast = (id: number) => {
+    setToasts((t) => t.filter((toast) => toast.id !== id));
+  };
+
   const [limits, setLimits] = useState({});
   const [globalOwned, setGlobalOwned] = useState(() => {
     const stored = getItem<Record<string, number>>('globalOwned');
@@ -76,7 +80,7 @@ function Dashboard() {
     const id = Date.now();
     setToasts((t) => [...t, { id, text }]);
     setTimeout(() => {
-      setToasts((t) => t.filter((toast) => toast.id !== id));
+      removeToast(id);
     }, 3000);
   };
 
@@ -325,7 +329,7 @@ function Dashboard() {
           />
         </WindowFrame>
         <Footer onReset={resetGame} />
-        <ToastContainer toasts={toasts} />
+        <ToastContainer toasts={toasts} onClose={removeToast} />
       </div>
     </Layout>
   );
