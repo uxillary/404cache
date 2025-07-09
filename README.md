@@ -20,6 +20,7 @@ Your best score is now saved locally and shown below the start button.
 ## Stock Search
 
 The Market window now includes a search bar to quickly filter stocks by name.
+When text is entered, a **Clear** button appears to reset the filter in one click.
 
 ## Expanding the ESLint configuration
 
