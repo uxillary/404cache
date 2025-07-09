@@ -7,6 +7,16 @@ function CoinGrabber() {
   const [timeLeft, setTimeLeft] = useState(20);
   const [earned, setEarned] = useState(0);
 
+  const spawnCoin = useCallback(() => {
+    const id = Date.now() + Math.random();
+    const x = Math.random() * 90;
+    const y = Math.random() * 80 + 5;
+    setCoins((c) => [...c, { id, x, y }]);
+    setTimeout(() => {
+      setCoins((c) => c.filter((coin) => coin.id !== id));
+    }, 1500);
+  }, []);
+
   const stopGame = useCallback(() => {
     setRunning(false);
     const balance = getItem('balance') ?? 0;
@@ -32,16 +42,6 @@ function CoinGrabber() {
     }
     return () => clearInterval(spawnId);
   }, [running, spawnCoin]);
-
-  const spawnCoin = useCallback(() => {
-    const id = Date.now() + Math.random();
-    const x = Math.random() * 90;
-    const y = Math.random() * 80 + 5;
-    setCoins((c) => [...c, { id, x, y }]);
-    setTimeout(() => {
-      setCoins((c) => c.filter((coin) => coin.id !== id));
-    }, 1500);
-  }, []);
 
   const collectCoin = (id) => {
     setCoins((c) => c.filter((coin) => coin.id !== id));

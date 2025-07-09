@@ -19,7 +19,7 @@ function PopupFrenzy() {
     ],
     []
   );
-  const styles = useMemo(
+const styles = useMemo(
     () => [
       { bg: 'bg-pink-600', border: 'border-pink-500', text: 'text-pink-200' },
       { bg: 'bg-yellow-600', border: 'border-yellow-400', text: 'text-yellow-200' },
@@ -27,6 +27,17 @@ function PopupFrenzy() {
     ],
     []
   );
+
+  const spawnPopup = useCallback(() => {
+    const id = Date.now() + Math.random();
+    const x = Math.random() * 80;
+    const y = Math.random() * 60 + 10;
+    const style = styles[Math.floor(Math.random() * styles.length)];
+    const message = messages[Math.floor(Math.random() * messages.length)];
+    setPopups((p) => [...p, { id, x, y, style, message }]);
+  }, [messages, styles]);
+
+
 
   const stopGame = useCallback(() => {
     setRunning(false);
@@ -57,16 +68,6 @@ function PopupFrenzy() {
     }
     return () => clearInterval(spawnId);
   }, [running, spawnPopup]);
-
-  const spawnPopup = useCallback(() => {
-    const id = Date.now() + Math.random();
-    const x = Math.random() * 80;
-    const y = Math.random() * 60 + 10;
-    const style = styles[Math.floor(Math.random() * styles.length)];
-    const message = messages[Math.floor(Math.random() * messages.length)];
-    setPopups((p) => [...p, { id, x, y, style, message }]);
-  }, [messages, styles]);
-
   const closePopup = (id) => {
     setPopups((p) => p.filter((pop) => pop.id !== id));
     setEarned((e) => e + 10);
