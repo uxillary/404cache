@@ -14,6 +14,7 @@ import LoginStreakDisplay from '../components/LoginStreakDisplay';
 import Layout from '../components/Layout';
 import Sidebar from '../components/Sidebar';
 import WindowFrame from '../components/WindowFrame';
+import StockFilter from '../components/StockFilter';
 import confetti from "canvas-confetti";
 import { getItem, setItem, removeItem } from "../lib/storage";
 
@@ -59,6 +60,8 @@ function Dashboard() {
   });
 
   const [loginStreak, setLoginStreak] = useState(1);
+
+  const [search, setSearch] = useState('');
 
   const [toasts, setToasts] = useState([]);
 
@@ -210,6 +213,10 @@ function Dashboard() {
   }, 0);
   const netWorth = balance + portfolioValue;
 
+  const filteredStocks = stocks.filter((s) =>
+    s.name.toLowerCase().includes(search.toLowerCase())
+  );
+
   const handleRandomBuy = () => {
     const random = stocks[Math.floor(Math.random() * stocks.length)];
     if (random) handleBuy(random.name);
@@ -261,8 +268,9 @@ function Dashboard() {
           />
         </WindowFrame>
         <WindowFrame title="Market">
+          <StockFilter search={search} onSearch={setSearch} />
           <StockList
-            stocks={stocks}
+            stocks={filteredStocks}
             portfolio={portfolio}
             balance={balance}
             onBuy={handleBuy}
