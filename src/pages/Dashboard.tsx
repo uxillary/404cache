@@ -66,6 +66,12 @@ function Dashboard() {
 
   const [toasts, setToasts] = useState([]);
 
+  const [limits, setLimits] = useState({});
+  const [globalOwned, setGlobalOwned] = useState(() => {
+    const stored = getItem<Record<string, number>>('globalOwned');
+    return stored ?? {};
+  });
+
   const addToast = (text) => {
     const id = Date.now();
     setToasts((t) => [...t, { id, text }]);
@@ -77,6 +83,13 @@ function Dashboard() {
   const updateStockPricesWrapper = () => {
     setStocks((prev) => updateStockPrices(prev));
   };
+
+  useEffect(() => {
+    fetch('/stockLimits.json')
+      .then((r) => r.json())
+      .then((data) => setLimits(data))
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const id = setInterval(updateStockPricesWrapper, 5000);
@@ -113,6 +126,10 @@ function Dashboard() {
   useEffect(() => {
     setItem('loginStreak', loginStreak);
   }, [loginStreak]);
+
+  useEffect(() => {
+    setItem('globalOwned', globalOwned);
+  }, [globalOwned]);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -167,9 +184,26 @@ function Dashboard() {
 
   const handleBuy = (stockName) => {
     const stock = stocks.find((s) => s.name === stockName);
+    const cap = limits[stockName];
+    const owned = portfolio[stockName] || 0;
+    const globalCount = globalOwned[stockName] || 0;
+    if (cap) {
+      if (globalCount >= cap.globalLimit) {
+        addToast(`${stockName} is sold out`);
+        return;
+      }
+      if (cap.perPlayerLimit && owned >= cap.perPlayerLimit) {
+        addToast(`You reached the limit for ${stockName}`);
+        return;
+      }
+    }
     if (balance >= stock.price) {
       setBalance((b) => b - stock.price);
-      setPortfolio((p) => ({ ...p, [stockName]: (p[stockName] || 0) + 1 }));
+      setPortfolio((p) => ({ ...p, [stockName]: owned + 1 }));
+      setGlobalOwned((g) => {
+        const updated = { ...g, [stockName]: globalCount + 1 };
+        return updated;
+      });
       addToast(`Bought 1 ${stockName} for ${stock.price}\u00A2`);
       confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
     } else {
@@ -182,6 +216,11 @@ function Dashboard() {
       const stock = stocks.find((s) => s.name === stockName);
       setBalance((b) => b + stock.price);
       setPortfolio((p) => ({ ...p, [stockName]: p[stockName] - 1 }));
+      setGlobalOwned((g) => {
+        const count = (g[stockName] || 0) - 1;
+        const updated = { ...g, [stockName]: Math.max(0, count) };
+        return updated;
+      });
       addToast(`Sold 1 ${stockName} for ${stock.price}\u00A2`);
     } else {
       addToast(`No ${stockName} stock to sell`);
@@ -198,6 +237,7 @@ function Dashboard() {
     setLoginStreak(1);
     setHistory([]);
     setStocks(INITIAL_STOCKS.map((s) => ({ ...s })));
+    setGlobalOwned({});
     removeItem('balance');
     removeItem('portfolio');
     removeItem('passiveRate');
@@ -206,6 +246,7 @@ function Dashboard() {
     removeItem('netWorthHistory');
     removeItem('loginStreak');
     removeItem('lastLoginDate');
+    removeItem('globalOwned');
   };
 
   const portfolioValue = stocks.reduce((sum, stock) => {
@@ -226,13 +267,16 @@ function Dashboard() {
   const handleSellAll = () => {
     let earned = 0;
     const newPortfolio = { ...portfolio };
+    const updatedGlobal = { ...globalOwned };
     stocks.forEach((s) => {
       const count = newPortfolio[s.name] || 0;
       if (count > 0) {
         earned += count * s.price;
         newPortfolio[s.name] = 0;
+        updatedGlobal[s.name] = Math.max(0, (updatedGlobal[s.name] || 0) - count);
       }
     });
+    setGlobalOwned(updatedGlobal);
     if (earned > 0) {
       setPortfolio(newPortfolio);
       setBalance((b) => b + earned);
@@ -276,6 +320,8 @@ function Dashboard() {
             balance={balance}
             onBuy={handleBuy}
             onSell={handleSell}
+            limits={limits}
+            globalOwned={globalOwned}
           />
         </WindowFrame>
         <Footer onReset={resetGame} />
