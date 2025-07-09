@@ -102,6 +102,12 @@ button:focus-visible {
   --font-family: 'Share Tech Mono', monospace;
 }
 
+.terminal-mode {
+  --bg-color: radial-gradient(circle at 50% 0px, rgb(0, 34, 0), rgb(0, 0, 0));
+  --text-color: #0f0;
+  --font-family: 'Share Tech Mono', monospace;
+}
+
 html,
 body,
 #root {

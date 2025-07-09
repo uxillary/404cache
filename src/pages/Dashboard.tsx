@@ -25,18 +25,18 @@ import confetti from "canvas-confetti";
 import { getItem, setItem, removeItem } from "../lib/storage";
 
 const INITIAL_STOCKS = [
-  { name: 'BananaCorp', emoji: '🍌', price: 120, prevPrice: 120, type: 'stable', history: [120] },
-  { name: 'DuckWare', emoji: '🦆', price: 80, prevPrice: 80, type: 'risky', history: [80] },
-  { name: 'ToasterInc', emoji: '🔥', price: 200, prevPrice: 200, type: 'trending', history: [200] },
-  { name: 'SpaceY', emoji: '🚀', price: 250, prevPrice: 250, type: 'risky', history: [250] },
-  { name: 'LlamaSoft', emoji: '🦙', price: 150, prevPrice: 150, type: 'stable', history: [150] },
-  { name: 'Robotix', emoji: '🤖', price: 180, prevPrice: 180, type: 'trending', history: [180] },
+  { name: 'BananaCorp', ticker: 'BAN', emoji: '🍌', price: 120, prevPrice: 120, type: 'stable', history: [120] },
+  { name: 'DuckWare', ticker: 'DUCK', emoji: '🦆', price: 80, prevPrice: 80, type: 'risky', history: [80] },
+  { name: 'ToasterInc', ticker: 'TOAST', emoji: '🔥', price: 200, prevPrice: 200, type: 'trending', history: [200] },
+  { name: 'SpaceY', ticker: 'SPACE', emoji: '🚀', price: 250, prevPrice: 250, type: 'risky', history: [250] },
+  { name: 'LlamaSoft', ticker: 'LLMA', emoji: '🦙', price: 150, prevPrice: 150, type: 'stable', history: [150] },
+  { name: 'Robotix', ticker: 'BOT', emoji: '🤖', price: 180, prevPrice: 180, type: 'trending', history: [180] },
 ];
 
 const RARE_MARKETS = {
   cyber: [
-    { name: 'CyberDyne', emoji: '💻', price: 300, prevPrice: 300, type: 'rare', history: [300] },
-    { name: 'MystiCorp', emoji: '🧪', price: 400, prevPrice: 400, type: 'rare', history: [400] },
+    { name: 'CyberDyne', ticker: 'CYBR', emoji: '💻', price: 300, prevPrice: 300, type: 'rare', history: [300] },
+    { name: 'MystiCorp', ticker: 'MYST', emoji: '🧪', price: 400, prevPrice: 400, type: 'rare', history: [400] },
   ],
 };
 

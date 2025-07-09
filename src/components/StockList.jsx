@@ -12,14 +12,16 @@ function StockList({ stocks, portfolio, balance, onBuy, onSell, limits, globalOw
     groups[cat].push(s);
   });
 
-  const containerCls = `grid gap-4 ${terminalMode ? 'bg-black text-green-300 font-mono p-2' : ''}`;
+  const containerCls = `grid gap-6 ${terminalMode ? 'p-2' : ''}`;
 
   return (
     <div className={containerCls}>
       {Object.entries(groups).map(([cat, list]) => (
-        <div key={cat} className="mb-6">
-          <h3 className="mb-2 text-lg font-bold text-green-400">{cat}</h3>
-          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div key={cat} className="mb-8">
+          <h3 className="sticky top-0 z-10 bg-gray-900/80 backdrop-blur px-2 py-1 border-b border-green-500 text-lg font-bold text-green-400">
+            {cat}
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
             {list.map((stock) => {
               const limit = limits?.[stock.name];
               const remaining = limit ? limit.globalLimit - (globalOwned[stock.name] || 0) : Infinity;
