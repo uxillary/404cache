@@ -15,7 +15,7 @@ body,
   padding: 0;
   width: 100%;
   min-height: 100%;
-  background: radial-gradient(circle at 50% 0, #034, #000);
+  background-image: radial-gradient(circle at 50% 0px, rgb(0, 34, 34), rgb(0, 0, 0));
   color: #0ff;
   font-family: 'Share Tech Mono', monospace;
 }
@@ -97,7 +97,7 @@ button:focus-visible {
 
 /* for placeholder */
 :root {
-  --bg-color: radial-gradient(circle at 50% 0, #034, #000);
+  --bg-color: radial-gradient(circle at 50% 0px, rgb(0, 34, 34), rgb(0, 0, 0));
   --text-color: #0ff;
   --font-family: 'Share Tech Mono', monospace;
 }
@@ -105,7 +105,7 @@ button:focus-visible {
 html,
 body,
 #root {
-  background: var(--bg-color);
+  background-image: var(--bg-color);
   color: var(--text-color);
   font-family: var(--font-family);
   font-size: 1.1rem;
