@@ -39,19 +39,22 @@ function StockCard({ stock, owned, balance, onBuy, onSell, globalRemaining, play
   return (
     <div
       onClick={() => setExpanded((e) => !e)}
-      className={`bg-gradient-to-br from-gray-900 to-gray-800 border p-4 mb-4 rounded shadow-lg shadow-green-700/30 transition-all hover:scale-105 flex flex-col gap-2 font-mono cursor-pointer ${
+      className={`neon-card p-4 mb-4 flex flex-col gap-2 cursor-pointer transition-all hover:shadow-cyan-500 hover:scale-105 min-h-56 ${
         flash === 'buy'
           ? 'border-green-500 animate-flash'
           : flash === 'sell'
           ? 'border-red-500 animate-flash'
-          : 'border-green-500'
-      } ${expanded ? 'max-h-80' : 'max-h-48'}`}
+          : 'border-cyan-400'
+      } ${expanded ? 'max-h-80' : 'max-h-56'}`}
     >
-      <div className="flex justify-between items-center flex-wrap gap-y-1">
+      <div className="flex justify-between items-start flex-wrap gap-y-1">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="text-3xl">{stock.emoji}</span>
-          <div className="text-green-300 text-xl font-bold break-words">
-            {stock.name}
+          <div>
+            <div className="text-green-300 text-xl font-bold leading-none">
+              {stock.name}
+            </div>
+            <div className="text-xs font-mono text-green-500">{stock.ticker}</div>
           </div>
           <span
             className={`text-xs px-2 rounded ${
@@ -67,16 +70,18 @@ function StockCard({ stock, owned, balance, onBuy, onSell, globalRemaining, play
         </div>
         <div className="text-yellow-300 text-sm">Owned: {owned}</div>
       </div>
-      <div className="text-blue-300 flex items-center">
-        Price: {stock.price}₵
+      <div className="text-blue-300 flex items-baseline gap-1 tabular-nums whitespace-nowrap">
+        <span>Price:</span>
+        <span>{stock.price}¢</span>
         {stock.price !== stock.prevPrice && (
           <span
             className={`ml-2 text-sm ${
               stock.price > stock.prevPrice ? 'text-green-400' : 'text-red-400'
             }`}
+            style={{ minWidth: '3.5rem' }}
           >
             {stock.price > stock.prevPrice ? '▲' : '▼'}
-            {Math.abs(stock.price - stock.prevPrice)}₵
+            {Math.abs(stock.price - stock.prevPrice)}¢
           </span>
         )}
         {stock.event && (
@@ -105,17 +110,17 @@ function StockCard({ stock, owned, balance, onBuy, onSell, globalRemaining, play
           <span className="text-red-400 ml-1">Cap reached</span>
         )}
       </div>
-      <div className="flex gap-2">
+      <div className="mt-auto flex gap-2">
         <button
           onClick={handleBuy}
-          className="bg-green-700 hover:bg-green-900 text-white px-2 py-1 text-sm rounded disabled:opacity-50 transition-transform duration-200 ease-out hover:scale-105"
+          className="neon-button bg-green-700 hover:bg-green-900 disabled:opacity-50"
           disabled={balance < stock.price}
         >
           Buy
         </button>
         <button
           onClick={handleSell}
-          className="bg-red-700 hover:bg-red-900 text-white px-2 py-1 text-sm rounded disabled:opacity-50 transition-transform duration-200 ease-out hover:scale-105"
+          className="neon-button bg-red-700 hover:bg-red-900 disabled:opacity-50"
           disabled={owned === 0}
         >
           Sell

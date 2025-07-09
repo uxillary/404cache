@@ -7,6 +7,7 @@ function TerminalModeToggle({ onToggle }) {
   useEffect(() => {
     setItem('terminalMode', enabled);
     onToggle(enabled);
+    document.documentElement.classList.toggle('terminal-mode', enabled);
   }, [enabled, onToggle]);
 
   return (
