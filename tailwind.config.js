@@ -17,9 +17,14 @@ export default {
             animationTimingFunction: 'cubic-bezier(0,0,0.2,1)',
           },
         },
+        flash: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.2' },
+        },
       },
       animation: {
         'bounce-small': 'bounce-small 0.5s',
+        flash: 'flash 0.5s ease-in-out',
       },
     },
   },

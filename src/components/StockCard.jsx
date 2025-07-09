@@ -15,6 +15,17 @@ function StockCard({ stock, owned, balance, onBuy, onSell }) {
         <div className="flex items-center gap-2">
           <span className="text-3xl">{stock.emoji}</span>
           <div className="text-green-300 text-xl font-bold">{stock.name}</div>
+          <span
+            className={`text-xs px-2 rounded ${
+              stock.type === 'stable'
+                ? 'bg-gray-700 text-gray-300'
+                : stock.type === 'risky'
+                ? 'bg-red-700 text-red-200'
+                : 'bg-blue-700 text-blue-200'
+            }`}
+          >
+            {stock.type}
+          </span>
         </div>
         <div className="text-yellow-300">Owned: {owned}</div>
       </div>
@@ -28,6 +39,15 @@ function StockCard({ stock, owned, balance, onBuy, onSell }) {
           >
             {stock.price > stock.prevPrice ? '▲' : '▼'}
             {Math.abs(stock.price - stock.prevPrice)}₵
+          </span>
+        )}
+        {stock.event && (
+          <span
+            className={`ml-2 ${
+              stock.event === 'spike-up' ? 'text-green-400' : 'text-red-400'
+            } animate-flash`}
+          >
+            ⚡
           </span>
         )}
       </div>
