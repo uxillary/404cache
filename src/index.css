@@ -17,7 +17,7 @@ body,
   min-height: 100%;
   background: radial-gradient(circle at 50% 0, #022, #000);
   color: #0ff;
-  font-family: 'Press Start 2P', monospace;
+  font-family: 'Share Tech Mono', monospace;
 }
 
 body {
@@ -99,7 +99,7 @@ button:focus-visible {
 :root {
   --bg-color: radial-gradient(circle at 50% 0, #022, #000);
   --text-color: #0ff;
-  --font-family: 'Press Start 2P', monospace;
+  --font-family: 'Share Tech Mono', monospace;
 }
 
 html,
@@ -157,4 +157,31 @@ body,
   margin-top: 40px;
   font-size: 0.9rem;
   color: #888;
+}
+
+.crt-effect {
+  position: relative;
+  overflow: hidden;
+}
+.crt-effect::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    rgba(255, 255, 255, 0.05) 50%,
+    transparent 50%
+  );
+  background-size: 100% 2px;
+  mix-blend-mode: overlay;
+  animation: scanlines 1s steps(60) infinite;
+}
+
+@keyframes scanlines {
+  0% {
+    background-position-y: 0;
+  }
+  100% {
+    background-position-y: 2px;
+  }
 }

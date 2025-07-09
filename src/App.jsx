@@ -11,6 +11,8 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import ToastContainer from './components/ToastContainer';
 import LoginStreakDisplay from './components/LoginStreakDisplay';
+import Layout from './components/Layout';
+import WindowFrame from './components/WindowFrame';
 import confetti from "canvas-confetti";
 import './index.css';
 
@@ -199,8 +201,8 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-green-300 font-mono p-4 md:p-8 flex items-start justify-center">
-      <div className="w-full max-w-3xl space-y-6">
+    <Layout>
+      <div className="space-y-6">
         <Header />
         <BalanceDisplay balance={balance} />
         <LoginStreakDisplay streak={loginStreak} />
@@ -209,22 +211,26 @@ function App() {
         <NetWorthDisplay balance={balance} stocks={stocks} portfolio={portfolio} />
         <PortfolioChart data={history} />
         <StockCount count={stocks.length} />
-        <UpgradeShop
-          upgrades={upgrades}
-          purchased={purchasedUpgrades}
-          onPurchase={handlePurchaseUpgrade}
-        />
-        <StockList
-          stocks={stocks}
-          portfolio={portfolio}
-          balance={balance}
-          onBuy={handleBuy}
-          onSell={handleSell}
-        />
+        <WindowFrame title="Upgrades">
+          <UpgradeShop
+            upgrades={upgrades}
+            purchased={purchasedUpgrades}
+            onPurchase={handlePurchaseUpgrade}
+          />
+        </WindowFrame>
+        <WindowFrame title="Market">
+          <StockList
+            stocks={stocks}
+            portfolio={portfolio}
+            balance={balance}
+            onBuy={handleBuy}
+            onSell={handleSell}
+          />
+        </WindowFrame>
         <Footer onReset={resetGame} />
         <ToastContainer toasts={toasts} />
       </div>
-    </div>
+    </Layout>
   );
 }
 
