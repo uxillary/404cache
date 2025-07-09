@@ -18,6 +18,7 @@ Visit the `/minigames` page to play **Pop-up Frenzy**. Close as many pop-up wind
 ## Stock Search
 
 The Market window now includes a search bar to quickly filter stocks by name.
+When text is entered, a **Clear** button appears to reset the filter in one click.
 
 ## Expanding the ESLint configuration
 
