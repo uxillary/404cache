@@ -11,6 +11,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import ToastContainer from './components/ToastContainer';
 import LoginStreakDisplay from './components/LoginStreakDisplay';
+import confetti from "canvas-confetti";
 import './index.css';
 
 function App() {
@@ -162,6 +163,7 @@ function App() {
       setBalance((b) => b - stock.price);
       setPortfolio((p) => ({ ...p, [stockName]: (p[stockName] || 0) + 1 }));
       addToast(`Bought 1 ${stockName} for ${stock.price}\u00A2`);
+      confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
     } else {
       addToast(`Not enough balance to buy ${stockName}`);
     }
