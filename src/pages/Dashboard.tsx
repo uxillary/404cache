@@ -28,10 +28,15 @@ const INITIAL_STOCKS = [
   { name: 'Robotix', emoji: '🤖', price: 180, prevPrice: 180, type: 'trending' },
 ];
 
+const RARE_MARKETS = {
+  cyber: [
+    { name: 'CyberDyne', emoji: '💻', price: 300, prevPrice: 300, type: 'rare' },
+    { name: 'MystiCorp', emoji: '🧪', price: 400, prevPrice: 400, type: 'rare' },
+  ],
+};
+
 function Dashboard() {
-  const upgrades = [
-    { id: 'upgrade_income', name: 'Faster Income', cost: 1000, bonus: 1 },
-  ];
+  const [upgrades, setUpgrades] = useState([]);
   const [balance, setBalance] = useState(() => {
     const stored = getItem<number>('balance');
     return stored ?? 5000;
@@ -46,6 +51,14 @@ function Dashboard() {
   });
   const [purchasedUpgrades, setPurchasedUpgrades] = useState(() => {
     const stored = getItem<string[]>('purchasedUpgrades');
+    return stored ?? [];
+  });
+  const [portfolioBonus, setPortfolioBonus] = useState(() => {
+    const stored = getItem<number>('portfolioBonus');
+    return stored ?? 1;
+  });
+  const [unlockedMarkets, setUnlockedMarkets] = useState(() => {
+    const stored = getItem<string[]>('unlockedMarkets');
     return stored ?? [];
   });
   const [passiveEarned, setPassiveEarned] = useState(() => {
@@ -89,9 +102,30 @@ function Dashboard() {
   };
 
   useEffect(() => {
+    setStocks((prev) => {
+      let updated = [...prev];
+      unlockedMarkets.forEach((m) => {
+        const extras = RARE_MARKETS[m];
+        if (extras) {
+          extras.forEach((stk) => {
+            if (!updated.find((s) => s.name === stk.name)) {
+              updated.push({ ...stk });
+            }
+          });
+        }
+      });
+      return updated;
+    });
+  }, [unlockedMarkets]);
+
+  useEffect(() => {
     fetch('/stockLimits.json')
       .then((r) => r.json())
       .then((data) => setLimits(data))
+      .catch(() => {});
+    fetch('/upgrades.json')
+      .then((r) => r.json())
+      .then((data) => setUpgrades(data))
       .catch(() => {});
   }, []);
 
@@ -158,7 +192,7 @@ function Dashboard() {
   useEffect(() => {
     const portfolioValue = stocks.reduce((sum, stock) => {
       const owned = portfolio[stock.name] || 0;
-      return sum + owned * stock.price;
+      return sum + owned * stock.price * portfolioBonus;
     }, 0);
     const netWorth = balance + portfolioValue;
     setHistory((h) => {
@@ -166,7 +200,7 @@ function Dashboard() {
       setItem('netWorthHistory', updated);
       return updated;
     });
-  }, [stocks, balance, portfolio]);
+  }, [stocks, balance, portfolio, portfolioBonus]);
 
   useEffect(() => {
     setItem('passiveRate', passiveRate);
@@ -176,13 +210,38 @@ function Dashboard() {
     setItem('purchasedUpgrades', purchasedUpgrades);
   }, [purchasedUpgrades]);
 
+  useEffect(() => {
+    setItem('portfolioBonus', portfolioBonus);
+  }, [portfolioBonus]);
+
+  useEffect(() => {
+    setItem('unlockedMarkets', unlockedMarkets);
+  }, [unlockedMarkets]);
+
   const handlePurchaseUpgrade = (id) => {
     const upgrade = upgrades.find((u) => u.id === id);
     if (!upgrade) return;
     if (balance >= upgrade.cost && !purchasedUpgrades.includes(id)) {
       setBalance((b) => b - upgrade.cost);
       setPurchasedUpgrades((u) => [...u, id]);
-      setPassiveRate((r) => r + upgrade.bonus);
+      switch (upgrade.type) {
+        case 'passive_add':
+          setPassiveRate((r) => r + upgrade.value);
+          break;
+        case 'passive_mult':
+          setPassiveRate((r) => r * upgrade.value);
+          break;
+        case 'portfolio_mult':
+          setPortfolioBonus((p) => p * upgrade.value);
+          break;
+        case 'unlock_market':
+          if (!unlockedMarkets.includes(upgrade.value)) {
+            setUnlockedMarkets((m) => [...m, upgrade.value]);
+          }
+          break;
+        default:
+          break;
+      }
     }
   };
 
@@ -218,14 +277,15 @@ function Dashboard() {
   const handleSell = (stockName) => {
     if (portfolio[stockName] > 0) {
       const stock = stocks.find((s) => s.name === stockName);
-      setBalance((b) => b + stock.price);
+      const sellPrice = Math.round(stock.price * portfolioBonus);
+      setBalance((b) => b + sellPrice);
       setPortfolio((p) => ({ ...p, [stockName]: p[stockName] - 1 }));
       setGlobalOwned((g) => {
         const count = (g[stockName] || 0) - 1;
         const updated = { ...g, [stockName]: Math.max(0, count) };
         return updated;
       });
-      addToast(`Sold 1 ${stockName} for ${stock.price}\u00A2`);
+      addToast(`Sold 1 ${stockName} for ${sellPrice}\u00A2`);
     } else {
       addToast(`No ${stockName} stock to sell`);
     }
@@ -237,6 +297,8 @@ function Dashboard() {
     setPortfolio({});
     setPassiveRate(5);
     setPurchasedUpgrades([]);
+    setPortfolioBonus(1);
+    setUnlockedMarkets([]);
     setPassiveEarned(0);
     setLoginStreak(1);
     setHistory([]);
@@ -246,6 +308,8 @@ function Dashboard() {
     removeItem('portfolio');
     removeItem('passiveRate');
     removeItem('purchasedUpgrades');
+    removeItem('portfolioBonus');
+    removeItem('unlockedMarkets');
     removeItem('passiveEarned');
     removeItem('netWorthHistory');
     removeItem('loginStreak');
@@ -255,7 +319,7 @@ function Dashboard() {
 
   const portfolioValue = stocks.reduce((sum, stock) => {
     const owned = portfolio[stock.name] || 0;
-    return sum + owned * stock.price;
+    return sum + owned * stock.price * portfolioBonus;
   }, 0);
   const netWorth = balance + portfolioValue;
 
@@ -275,7 +339,7 @@ function Dashboard() {
     stocks.forEach((s) => {
       const count = newPortfolio[s.name] || 0;
       if (count > 0) {
-        earned += count * s.price;
+        earned += count * Math.round(s.price * portfolioBonus);
         newPortfolio[s.name] = 0;
         updatedGlobal[s.name] = Math.max(0, (updatedGlobal[s.name] || 0) - count);
       }
@@ -305,8 +369,17 @@ function Dashboard() {
         <BalanceDisplay balance={balance} />
         <LoginStreakDisplay streak={loginStreak} />
         <PassiveIncomeDisplay rate={passiveRate} earned={passiveEarned} />
-        <PortfolioValueDisplay stocks={stocks} portfolio={portfolio} />
-        <NetWorthDisplay balance={balance} stocks={stocks} portfolio={portfolio} />
+        <PortfolioValueDisplay
+          stocks={stocks}
+          portfolio={portfolio}
+          bonus={portfolioBonus}
+        />
+        <NetWorthDisplay
+          balance={balance}
+          stocks={stocks}
+          portfolio={portfolio}
+          bonus={portfolioBonus}
+        />
         <PortfolioChart data={history} />
         <StockCount count={stocks.length} />
         <WindowFrame title="Upgrades">

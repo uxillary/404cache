@@ -1,7 +1,7 @@
-function NetWorthDisplay({ balance, stocks, portfolio }) {
+function NetWorthDisplay({ balance, stocks, portfolio, bonus = 1 }) {
   const totalStocksValue = stocks.reduce((sum, stock) => {
     const owned = portfolio[stock.name] || 0;
-    return sum + owned * stock.price;
+    return sum + owned * stock.price * bonus;
   }, 0);
   const netWorth = balance + totalStocksValue;
 
