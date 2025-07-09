@@ -14,6 +14,7 @@ Currently, two official plugins are available:
 ## Minigames
 
 Visit the `/minigames` page to play **Pop-up Frenzy**. Close as many pop-up windows as possible in 20 seconds to earn extra coins that are automatically added to your balance.
+Your best score is now saved locally and shown below the start button.
 
 ## Stock Search
 
