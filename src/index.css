@@ -185,3 +185,18 @@ body,
     background-position-y: 2px;
   }
 }
+
+/* Neon card and button styles */
+.neon-card {
+  border: 2px solid #0ff;
+  box-shadow: 0 0 8px #0ff;
+  background-color: rgba(0,0,0,0.6);
+  border-radius: 0.5rem;
+}
+.neon-button {
+  @apply bg-green-700 text-white px-4 py-2 rounded border border-cyan-400 shadow-[0_0_6px_#0ff] transition;
+}
+.neon-button:hover {
+  @apply shadow-[0_0_12px_#0ff] animate-pulse;
+}
+

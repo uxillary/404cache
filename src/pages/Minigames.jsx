@@ -5,19 +5,21 @@ import CoinGrabber from '../components/CoinGrabber';
 function Minigames() {
   return (
     <Layout>
-      <div className="text-center text-green-400 mt-10 space-y-8">
-        <h2 className="text-3xl mb-4">Minigames</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            <p className="mb-2">Close pop-ups to earn extra coins.</p>
+      <section className="mt-10 text-green-300 space-y-8">
+        <h2 className="text-center text-3xl text-green-400 mb-6">Minigames</h2>
+        <div className="grid gap-8 md:grid-cols-2">
+          <article className="neon-card flex flex-col items-center">
+            <h3 className="text-2xl mb-2 text-green-200">Pop-up Frenzy</h3>
+            <p className="mb-4 text-sm text-green-400">Close pop-ups fast to earn more coins.</p>
             <PopupFrenzy />
-          </div>
-          <div>
-            <p className="mb-2">Grab the coins before they disappear.</p>
+          </article>
+          <article className="neon-card flex flex-col items-center">
+            <h3 className="text-2xl mb-2 text-green-200">Coin Grabber</h3>
+            <p className="mb-4 text-sm text-green-400">Click coins before they vanish.</p>
             <CoinGrabber />
-          </div>
+          </article>
         </div>
-      </div>
+      </section>
     </Layout>
   );
 }

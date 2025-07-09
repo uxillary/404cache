@@ -61,7 +61,7 @@ function CoinGrabber() {
         <div className="flex flex-col items-center justify-center h-full space-y-4">
           <button
             onClick={startGame}
-            className="bg-green-700 hover:bg-green-900 text-white px-4 py-2 rounded"
+            className="neon-button"
           >
             Start Coin Grabber
           </button>
