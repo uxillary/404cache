@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { updateStockPrices } from '../utils/stockSimulator';
 import PortfolioChart from '../components/PortfolioChart';
 import BalanceDisplay from '../components/BalanceDisplay';
 import PortfolioValueDisplay from '../components/PortfolioValueDisplay';
@@ -19,12 +20,12 @@ import confetti from "canvas-confetti";
 import { getItem, setItem, removeItem } from "../lib/storage";
 
 const INITIAL_STOCKS = [
-  { name: 'BananaCorp', emoji: '🍌', price: 120, prevPrice: 120 },
-  { name: 'DuckWare', emoji: '🦆', price: 80, prevPrice: 80 },
-  { name: 'ToasterInc', emoji: '🔥', price: 200, prevPrice: 200 },
-  { name: 'SpaceY', emoji: '🚀', price: 250, prevPrice: 250 },
-  { name: 'LlamaSoft', emoji: '🦙', price: 150, prevPrice: 150 },
-  { name: 'Robotix', emoji: '🤖', price: 180, prevPrice: 180 },
+  { name: 'BananaCorp', emoji: '🍌', price: 120, prevPrice: 120, type: 'stable' },
+  { name: 'DuckWare', emoji: '🦆', price: 80, prevPrice: 80, type: 'risky' },
+  { name: 'ToasterInc', emoji: '🔥', price: 200, prevPrice: 200, type: 'trending' },
+  { name: 'SpaceY', emoji: '🚀', price: 250, prevPrice: 250, type: 'risky' },
+  { name: 'LlamaSoft', emoji: '🦙', price: 150, prevPrice: 150, type: 'stable' },
+  { name: 'Robotix', emoji: '🤖', price: 180, prevPrice: 180, type: 'trending' },
 ];
 
 function Dashboard() {
@@ -73,18 +74,12 @@ function Dashboard() {
     }, 3000);
   };
 
-  const updateStockPrices = () => {
-    setStocks((prev) =>
-      prev.map((stock) => {
-        const changePct = (Math.random() - 0.5) * 0.2; // -10% to +10%
-        const newPrice = Math.max(1, Math.round(stock.price * (1 + changePct)));
-        return { ...stock, prevPrice: stock.price, price: newPrice };
-      })
-    );
+  const updateStockPricesWrapper = () => {
+    setStocks((prev) => updateStockPrices(prev));
   };
 
   useEffect(() => {
-    const id = setInterval(updateStockPrices, 5000);
+    const id = setInterval(updateStockPricesWrapper, 5000);
     return () => clearInterval(id);
   }, []);
 
