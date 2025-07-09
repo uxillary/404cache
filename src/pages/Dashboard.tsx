@@ -191,17 +191,23 @@ function Dashboard() {
   };
 
   const resetGame = () => {
+    if (!confirm('Reset all progress?')) return;
     setBalance(5000);
     setPortfolio({});
     setPassiveRate(5);
     setPurchasedUpgrades([]);
     setPassiveEarned(0);
+    setLoginStreak(1);
+    setHistory([]);
     setStocks(INITIAL_STOCKS.map((s) => ({ ...s })));
     removeItem('balance');
     removeItem('portfolio');
     removeItem('passiveRate');
     removeItem('purchasedUpgrades');
     removeItem('passiveEarned');
+    removeItem('netWorthHistory');
+    removeItem('loginStreak');
+    removeItem('lastLoginDate');
   };
 
   const portfolioValue = stocks.reduce((sum, stock) => {
