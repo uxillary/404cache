@@ -2,7 +2,7 @@ import StockCard from './StockCard';
 
 function StockList({ stocks, portfolio, balance, onBuy, onSell }) {
   return (
-    <div>
+    <div className="grid gap-4 sm:grid-cols-2">
       {stocks.map((stock) => (
         <StockCard
           key={stock.name}
