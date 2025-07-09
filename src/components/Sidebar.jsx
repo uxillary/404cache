@@ -1,10 +1,10 @@
 import React from 'react'
 
-function Sidebar({ balance, netWorth, onRandomBuy, onSellAll, onReset, className = '' }) {
+function Sidebar({ balance, netWorth, onRandomBuy, onSellAll, onReset, onShowCommands, className = '' }) {
   return (
-    <aside className={`w-40 bg-black/80 border-r border-green-600 p-4 font-mono text-green-300 ${className}`}>
-      <h2 className="text-green-400 mb-3">&gt; Tools</h2>
-      <div className="space-y-2 text-sm">
+    <aside className={`w-40 bg-black/80 border-r border-green-600 p-6 font-mono text-green-300 ${className}`}>
+      <h2 className="text-green-400 mb-4">&gt; Tools</h2>
+      <div className="space-y-3 text-sm">
         <div>Balance: {balance}₵</div>
         <div>Net Worth: {netWorth}₵</div>
         <button
@@ -25,6 +25,14 @@ function Sidebar({ balance, netWorth, onRandomBuy, onSellAll, onReset, className
         >
           Reset
         </button>
+        {onShowCommands && (
+          <button
+            onClick={onShowCommands}
+            className="w-full bg-blue-700 hover:bg-blue-900 text-white px-2 py-1 rounded"
+          >
+            Commands
+          </button>
+        )}
       </div>
     </aside>
   )

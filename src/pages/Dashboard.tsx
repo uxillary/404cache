@@ -391,6 +391,7 @@ function Dashboard() {
           onRandomBuy={handleRandomBuy}
           onSellAll={handleSellAll}
           onReset={resetGame}
+          onShowCommands={() => setShowCmd(true)}
         />
       }
     >
