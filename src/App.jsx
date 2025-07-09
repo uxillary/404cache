@@ -45,6 +45,9 @@ function App() {
     { name: 'BananaCorp \ud83c\udf4c', price: 120, prevPrice: 120 },
     { name: 'DuckWare \ud83e\udd86', price: 80, prevPrice: 80 },
     { name: 'ToasterInc \ud83d\udd25', price: 200, prevPrice: 200 },
+    { name: 'PixelPets \ud83d\udc31', price: 50, prevPrice: 50 },
+    { name: 'RoboDudes \ud83e\udd16', price: 150, prevPrice: 150 },
+    { name: 'CryptoNoggin \ud83d\udc8e', price: 300, prevPrice: 300 },
   ]);
   const [history, setHistory] = useState(() => {
     const stored = localStorage.getItem('netWorthHistory');
@@ -193,6 +196,9 @@ function App() {
       { name: 'BananaCorp \ud83c\udf4c', price: 120 },
       { name: 'DuckWare \ud83e\udd86', price: 80 },
       { name: 'ToasterInc \ud83d\udd25', price: 200 },
+      { name: 'PixelPets \ud83d\udc31', price: 50 },
+      { name: 'RoboDudes \ud83e\udd16', price: 150 },
+      { name: 'CryptoNoggin \ud83d\udc8e', price: 300 },
     ]);
     localStorage.removeItem('balance');
     localStorage.removeItem('portfolio');
