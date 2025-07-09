@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import ThemeToggle from './ThemeToggle';
 
 function TopNav() {
   const baseClasses =
@@ -9,7 +10,7 @@ function TopNav() {
       <NavLink to="/" className="text-pink-400 glitch text-xl font-bold tracking-widest">
         404CACHE
       </NavLink>
-      <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0">
+      <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0 items-center">
         <NavLink
           to="/"
           className={({ isActive }) => `${baseClasses} ${isActive ? 'text-cyan-400' : ''}`}
@@ -34,6 +35,7 @@ function TopNav() {
         >
           Profile
         </NavLink>
+        <ThemeToggle />
       </div>
     </nav>
   );

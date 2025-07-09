@@ -3,7 +3,7 @@ import WindowFrame from '../../components/WindowFrame'
 import { getItem, setItem } from '../../lib/storage'
 
 function Fragments() {
-  const [fragments, setFragments] = useState(() => getItem('memoryFragments') || {})
+  const [fragments, _setFragments] = useState(() => getItem('memoryFragments') || {})
 
   useEffect(() => {
     setItem('memoryFragments', fragments)
