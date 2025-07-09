@@ -15,6 +15,10 @@ Currently, two official plugins are available:
 
 Visit the `/minigames` page to play **Pop-up Frenzy**. Close as many pop-up windows as possible in 20 seconds to earn extra coins that are automatically added to your balance.
 
+## Stock Search
+
+The Market window now includes a search bar to quickly filter stocks by name.
+
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
