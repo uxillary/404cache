@@ -5,6 +5,7 @@ export default {
     extend: {
       fontFamily: {
         mono: ['"Share Tech Mono"', 'monospace'],
+        pixel: ['"Press Start 2P"', 'monospace'],
       },
       keyframes: {
         'bounce-small': {
