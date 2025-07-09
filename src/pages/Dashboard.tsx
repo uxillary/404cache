@@ -66,12 +66,16 @@ function Dashboard() {
 
   const [toasts, setToasts] = useState([]);
 
-  const addToast = (text) => {
+  const addToast = (text, closable = false) => {
     const id = Date.now();
-    setToasts((t) => [...t, { id, text }]);
+    setToasts((t) => [...t, { id, text, closable }]);
     setTimeout(() => {
       setToasts((t) => t.filter((toast) => toast.id !== id));
     }, 3000);
+  };
+
+  const closeToast = (id) => {
+    setToasts((t) => t.filter((toast) => toast.id !== id));
   };
 
   const updateStockPricesWrapper = () => {
@@ -170,7 +174,7 @@ function Dashboard() {
     if (balance >= stock.price) {
       setBalance((b) => b - stock.price);
       setPortfolio((p) => ({ ...p, [stockName]: (p[stockName] || 0) + 1 }));
-      addToast(`Bought 1 ${stockName} for ${stock.price}\u00A2`);
+      addToast(`Bought 1 ${stockName} for ${stock.price}\u00A2`, true);
       confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
     } else {
       addToast(`Not enough balance to buy ${stockName}`);
@@ -279,7 +283,7 @@ function Dashboard() {
           />
         </WindowFrame>
         <Footer onReset={resetGame} />
-        <ToastContainer toasts={toasts} />
+        <ToastContainer toasts={toasts} onClose={closeToast} />
       </div>
     </Layout>
   );

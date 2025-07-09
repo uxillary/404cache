@@ -56,14 +56,14 @@ function StockCard({ stock, owned, balance, onBuy, onSell }) {
       <div className="flex gap-2">
         <button
           onClick={handleBuy}
-          className={`bg-green-700 hover:bg-green-900 text-white px-3 py-1 rounded disabled:opacity-50 ${bouncing ? 'animate-bounce-small' : ''}`}
+          className={`bg-green-700 hover:bg-green-900 text-white text-sm px-2 py-1 rounded disabled:opacity-50 ${bouncing ? 'animate-bounce-small' : ''}`}
           disabled={balance < stock.price}
         >
           Buy
         </button>
         <button
           onClick={() => onSell(stock.name)}
-          className="bg-red-700 hover:bg-red-900 text-white px-3 py-1 rounded disabled:opacity-50"
+          className="bg-red-700 hover:bg-red-900 text-white text-sm px-2 py-1 rounded disabled:opacity-50"
           disabled={owned === 0}
         >
           Sell
