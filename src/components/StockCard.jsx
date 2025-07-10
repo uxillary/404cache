@@ -27,12 +27,13 @@ function StockCard({ stock, owned, balance, onBuy, onSell, globalRemaining, play
     setTimeout(() => setFlash(null), 300);
   };
 
-  const history = stock.history || [];
-  const max = Math.max(...history, stock.price);
-  const min = Math.min(...history, stock.price);
-  const points = history
+  const rawHistory = stock.history && stock.history.length ? stock.history : [stock.price];
+  const graphHistory = rawHistory.length === 1 ? [rawHistory[0], rawHistory[0]] : rawHistory;
+  const max = Math.max(...graphHistory);
+  const min = Math.min(...graphHistory);
+  const points = graphHistory
     .map((v, i) => {
-      const x = (i / (history.length - 1 || 1)) * 40;
+      const x = (i / (graphHistory.length - 1)) * 40;
       const y = 20 - ((v - min) / (max - min || 1)) * 20;
       return `${x},${y}`;
     })
@@ -96,7 +97,7 @@ function StockCard({ stock, owned, balance, onBuy, onSell, globalRemaining, play
           </span>
         )}
       </div>
-      {history.length > 1 && (
+      {graphHistory.length > 1 && (
         <svg viewBox="0 0 40 20" className="w-full h-5 text-green-400">
           <polyline
             fill="none"
