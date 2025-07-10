@@ -4,48 +4,62 @@
     "name": "Faster Income",
     "type": "passive_add",
     "value": 1,
-    "cost": 1000
+    "cost": 1000,
+    "category": "Passive Income",
+    "description": "Adds 1\u00A2 to your payout every cycle"
   },
   {
     "id": "upgrade_portfolio_5",
     "name": "Portfolio Boost +5%",
     "type": "portfolio_mult",
     "value": 1.05,
-    "cost": 1500
+    "cost": 1500,
+    "category": "Portfolio",
+    "description": "Increase sell price by 5%"
   },
   {
     "id": "upgrade_income_mult",
     "name": "Passive Income +20%",
     "type": "passive_mult",
     "value": 1.2,
-    "cost": 2000
+    "cost": 2000,
+    "category": "Passive Income",
+    "description": "Multiply passive income by 20%"
   },
   {
     "id": "unlock_rare_markets",
     "name": "Unlock Rare Markets",
     "type": "unlock_market",
     "value": "cyber",
-    "cost": 5000
+    "cost": 5000,
+    "category": "Market",
+    "description": "Access new cyber themed stocks"
   },
   {
     "id": "limit_upgrade_1",
     "name": "Buy Limit +5 I",
     "type": "limit_up",
     "value": 5,
-    "cost": 2000
+    "cost": 2000,
+    "category": "Buy Limit Tiers",
+    "description": "Increase per-stock cap by 5"
   },
   {
     "id": "limit_upgrade_2",
     "name": "Buy Limit +5 II",
     "type": "limit_up",
     "value": 5,
-    "cost": 4000
+    "cost": 4000,
+    "category": "Buy Limit Tiers",
+    "description": "Increase per-stock cap by 5"
   },
   {
     "id": "limit_upgrade_3",
     "name": "Buy Limit +5 III",
     "type": "limit_up",
     "value": 5,
-    "cost": 8000
+    "cost": 8000,
+    "category": "Buy Limit Tiers",
+    "description": "Increase per-stock cap by 5"
   }
 ]
