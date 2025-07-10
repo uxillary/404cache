@@ -4,9 +4,9 @@ function Layout({ children, sidebar }) {
   const [showMobileSidebar, setShowMobileSidebar] = useState(false)
 
   return (
-    <div className="min-h-screen flex bg-black text-green-300 font-mono crt-effect">
+    <div className="min-h-screen flex bg-gradient-to-br from-gray-950 via-black to-black text-green-300 font-sans crt-effect shadow-inner">
       {sidebar && React.cloneElement(sidebar, { className: `${sidebar.props.className ?? ''} hidden lg:block` })}
-      <div className="flex-1 p-4 md:p-8">
+      <div className="flex-1 p-6 md:p-10">
         <div className="max-w-5xl mx-auto">{children}</div>
       </div>
       {sidebar && (
@@ -19,7 +19,7 @@ function Layout({ children, sidebar }) {
           </button>
           {showMobileSidebar && (
             <div className="lg:hidden fixed inset-0 z-30 flex">
-              <div className="w-40 bg-black/90 border-r border-green-600 p-4 overflow-y-auto">
+              <div className="w-40 bg-black/80 backdrop-blur-sm border-r border-green-700 p-4 overflow-y-auto">
                 <button
                   onClick={() => setShowMobileSidebar(false)}
                   className="mb-4 bg-red-700 hover:bg-red-900 text-white px-2 py-1 rounded w-full"
@@ -28,7 +28,10 @@ function Layout({ children, sidebar }) {
                 </button>
                 {React.cloneElement(sidebar, { className: sidebar.props.className ?? '' })}
               </div>
-              <div className="flex-1 bg-black/70" onClick={() => setShowMobileSidebar(false)} />
+              <div
+                className="flex-1 bg-black/70 backdrop-blur-sm"
+                onClick={() => setShowMobileSidebar(false)}
+              />
             </div>
           )}
         </>

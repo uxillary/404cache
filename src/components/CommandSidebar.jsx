@@ -10,7 +10,7 @@ function CommandSidebar({ onCommand, onClose }) {
   };
 
   return (
-    <div className="fixed inset-y-0 right-0 w-60 bg-black border-l border-green-600 p-4 z-30">
+    <div className="fixed inset-y-0 right-0 w-60 bg-black/80 backdrop-blur-sm border-l border-green-700 p-4 z-30">
       <div className="flex justify-between mb-2 text-green-400">
         <span>Commands</span>
         <button onClick={onClose} className="text-red-400">X</button>

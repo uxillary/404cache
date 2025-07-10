@@ -17,7 +17,7 @@ body,
   min-height: 100%;
   background-image: radial-gradient(circle at 50% 0px, rgb(0, 34, 34), rgb(0, 0, 0));
   color: #0ff;
-  font-family: 'Share Tech Mono', monospace;
+  font-family: var(--font-family);
 }
 
 body {
@@ -27,7 +27,7 @@ body {
 }
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -99,7 +99,7 @@ button:focus-visible {
 :root {
   --bg-color: radial-gradient(circle at 50% 0px, rgb(0, 34, 34), rgb(0, 0, 0));
   --text-color: #0ff;
-  --font-family: 'Share Tech Mono', monospace;
+  --font-family: 'Inter', sans-serif;
 }
 
 .terminal-mode {

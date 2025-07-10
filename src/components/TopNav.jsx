@@ -10,7 +10,7 @@ function TopNav() {
   const avatar = getItem('profileAvatar') || '😎';
 
   return (
-    <nav className="sticky top-0 z-10 flex justify-between items-center px-6 py-4 bg-gradient-to-b from-gray-900/80 to-black/80 backdrop-blur-md text-green-400 border-b border-green-600 shadow-lg">
+    <nav className="sticky top-0 z-20 flex justify-between items-center px-6 py-3 bg-black/70 backdrop-blur-sm text-green-400 border-b border-green-700 shadow-lg">
       <NavLink to="/" className="text-pink-400 glitch text-xl font-bold tracking-widest">
         404CACHE
       </NavLink>
