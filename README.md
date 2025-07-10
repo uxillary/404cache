@@ -2,6 +2,30 @@
 
 This project uses Vite and React to showcase the early MVP for the 404Cache stock market game. Prices update automatically and you can buy or sell a collection of **six** playful stocks to watch your balance change. Each stock sports its own emoji for quick recognition. A running total of your portfolio value is displayed under your balance, along with a net worth readout that sums balance and portfolio value. A passive income system pays out every few seconds, and an upgrade shop lets you spend currency to increase that rate or expand your personal stock limits.
 
+## Getting Started
+
+1. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+2. Launch the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+   The app will be available at `http://localhost:5173` by default.
+
+3. To create a production build run:
+
+   ```bash
+   npm run build
+   ```
+
+   The optimized files are output to the `dist` directory.
+
 ## Data Persistence
 
 Your balance, owned stock amounts, passive income rate, and purchased upgrades are stored in **localStorage** using a `404cache_` prefix, so your progress sticks around between browser sessions.
