@@ -3,6 +3,7 @@ import ProfileStats from '../components/ProfileStats';
 import ProfileSettings from '../components/ProfileSettings';
 import PortfolioChart from '../components/PortfolioChart';
 import HighScoreDisplay from '../components/HighScoreDisplay';
+import AvatarShop from '../components/AvatarShop';
 import { getItem } from '../lib/storage';
 
 function Profile() {
@@ -20,6 +21,7 @@ function Profile() {
         <HighScoreDisplay score={highScore} />
         <PortfolioChart data={history} />
         <ProfileSettings />
+        <AvatarShop />
       </div>
     </Layout>
   );
