@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { getItem, setItem } from '../../lib/storage'
 
 const msgs = [
   'Download RAM?',
@@ -21,6 +22,7 @@ function PopupFrenzy() {
   const [high, setHigh] = useState(() => Number(localStorage.getItem('popup_high')) || 0)
   const [combo, setCombo] = useState(0)
   const [mult, setMult] = useState(1)
+  const [earned, setEarned] = useState(0)
 
   const comboRef = useRef({})
   const multRef = useRef()
@@ -59,6 +61,12 @@ function PopupFrenzy() {
     setPopups([])
     setCombo(0)
     setMult(1)
+    if (score > 0) {
+      const bal = getItem('balance') ?? 0
+      const newBal = bal + score
+      setItem('balance', newBal)
+      setEarned(score)
+    }
     if (score > high) {
       setHigh(score)
       localStorage.setItem('popup_high', score)
@@ -128,6 +136,7 @@ function PopupFrenzy() {
     setPopups([])
     setCombo(0)
     setMult(1)
+    setEarned(0)
   }
 
   return (
@@ -136,7 +145,12 @@ function PopupFrenzy() {
         <div className="flex flex-col items-center justify-center h-full space-y-2">
           <button onClick={startGame} className="neon-button">Start Pop-up Frenzy</button>
           <div>High Score: {high}</div>
-          {score > 0 && <div>Last Score: {score}</div>}
+          {score > 0 && (
+            <div>
+              Last Score: {score}
+              {earned > 0 && <span> (+{earned}₵)</span>}
+            </div>
+          )}
         </div>
       ) : (
         <>

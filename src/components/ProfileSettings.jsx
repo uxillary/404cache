@@ -1,18 +1,28 @@
 import { useState, useEffect } from 'react';
 import { getItem, setItem } from '../lib/storage';
 
-const AVATARS = ['😎', '👾', '🤖', '🦙', '🐱', '🦆'];
+const DEFAULT_AVATARS = ['😎', '👾', '🤖', '🦙', '🐱', '🦆'];
 
 function ProfileSettings() {
   const [name, setName] = useState('');
-  const [avatar, setAvatar] = useState(AVATARS[0]);
+  const [avatar, setAvatar] = useState(DEFAULT_AVATARS[0]);
   const [saved, setSaved] = useState(false);
+  const [avatars, setAvatars] = useState(DEFAULT_AVATARS);
 
   useEffect(() => {
     const storedName = getItem('profileName');
     const storedAvatar = getItem('profileAvatar');
+    const owned = getItem('ownedAvatars');
     if (storedName) setName(storedName);
     if (storedAvatar) setAvatar(storedAvatar);
+    if (owned) setAvatars(owned);
+
+    const handleUpdate = () => {
+      const updated = getItem('ownedAvatars');
+      if (updated) setAvatars(updated);
+    };
+    window.addEventListener('avatarsUpdated', handleUpdate);
+    return () => window.removeEventListener('avatarsUpdated', handleUpdate);
   }, []);
 
   const save = () => {
@@ -36,7 +46,7 @@ function ProfileSettings() {
       <div>
         <label className="block text-sm mb-1">Avatar</label>
         <div className="flex space-x-2">
-          {AVATARS.map((a) => (
+          {avatars.map((a) => (
             <button
               key={a}
               onClick={() => setAvatar(a)}
