@@ -1,10 +1,13 @@
 import { NavLink } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 import SoundToggle from './SoundToggle';
+import { getItem } from '../lib/storage';
 
 function TopNav() {
   const baseClasses =
     'px-3 py-1 hover:text-cyan-400 hover:scale-105 transition-all uppercase font-semibold';
+  const name = getItem('profileName') || 'User';
+  const avatar = getItem('profileAvatar') || '😎';
 
   return (
     <nav className="sticky top-0 z-10 flex justify-between items-center px-6 py-4 bg-gradient-to-b from-gray-900/80 to-black/80 backdrop-blur-md text-green-400 border-b border-green-600 shadow-lg">
@@ -38,6 +41,10 @@ function TopNav() {
         </NavLink>
         <SoundToggle />
         <ThemeToggle />
+        <div className="hidden sm:flex items-center ml-2 space-x-1">
+          <span className="text-xl">{avatar}</span>
+          <span className="text-sm">{name}</span>
+        </div>
       </div>
     </nav>
   );
