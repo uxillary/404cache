@@ -26,5 +26,26 @@
     "type": "unlock_market",
     "value": "cyber",
     "cost": 5000
+  },
+  {
+    "id": "limit_upgrade_1",
+    "name": "Buy Limit +5 I",
+    "type": "limit_up",
+    "value": 5,
+    "cost": 2000
+  },
+  {
+    "id": "limit_upgrade_2",
+    "name": "Buy Limit +5 II",
+    "type": "limit_up",
+    "value": 5,
+    "cost": 4000
+  },
+  {
+    "id": "limit_upgrade_3",
+    "name": "Buy Limit +5 III",
+    "type": "limit_up",
+    "value": 5,
+    "cost": 8000
   }
 ]

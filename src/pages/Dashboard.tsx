@@ -98,6 +98,10 @@ function Dashboard() {
 
 
   const [limits, setLimits] = useState({});
+  const [extraLimit, setExtraLimit] = useState(() => {
+    const stored = getItem<number>('extraLimit');
+    return stored ?? 0;
+  });
   const [globalOwned, setGlobalOwned] = useState(() => {
     const stored = getItem<Record<string, number>>('globalOwned');
     return stored ?? {};
@@ -226,6 +230,10 @@ function Dashboard() {
     setItem('unlockedMarkets', unlockedMarkets);
   }, [unlockedMarkets]);
 
+  useEffect(() => {
+    setItem('extraLimit', extraLimit);
+  }, [extraLimit]);
+
   const handlePurchaseUpgrade = (id) => {
     const upgrade = upgrades.find((u) => u.id === id);
     if (!upgrade) return;
@@ -247,6 +255,9 @@ function Dashboard() {
             setUnlockedMarkets((m) => [...m, upgrade.value]);
           }
           break;
+        case 'limit_up':
+          setExtraLimit((l) => l + upgrade.value);
+          break;
         default:
           break;
       }
@@ -266,7 +277,7 @@ function Dashboard() {
         addToast(`${stockName} is sold out`);
         return;
       }
-      if (cap.perPlayerLimit && owned >= cap.perPlayerLimit) {
+      if (cap.perPlayerLimit && owned >= cap.perPlayerLimit + extraLimit) {
         addToast(`You reached the limit for ${stockName}`);
         return;
       }
@@ -319,6 +330,7 @@ function Dashboard() {
     setHistory([]);
     setStocks(INITIAL_STOCKS.map((s) => ({ ...s })));
     setGlobalOwned({});
+    setExtraLimit(0);
     removeItem('balance');
     removeItem('portfolio');
     removeItem('passiveRate');
@@ -330,6 +342,7 @@ function Dashboard() {
     removeItem('loginStreak');
     removeItem('lastLoginDate');
     removeItem('globalOwned');
+    removeItem('extraLimit');
   };
 
   const portfolioValue = stocks.reduce((sum, stock) => {
@@ -432,6 +445,7 @@ function Dashboard() {
             onBuy={handleBuy}
             onSell={handleSell}
             limits={limits}
+            extraLimit={extraLimit}
             globalOwned={globalOwned}
             terminalMode={terminalMode}
           />
