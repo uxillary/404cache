@@ -1,6 +1,6 @@
 import StockCard from './StockCard';
 
-function StockList({ stocks, portfolio, balance, onBuy, onSell, limits, globalOwned, terminalMode }) {
+function StockList({ stocks, portfolio, balance, onBuy, onSell, limits, extraLimit = 0, globalOwned, terminalMode }) {
   const groups = {
     Stable: [],
     Volatile: [],
@@ -25,7 +25,9 @@ function StockList({ stocks, portfolio, balance, onBuy, onSell, limits, globalOw
             {list.map((stock) => {
               const limit = limits?.[stock.name];
               const remaining = limit ? limit.globalLimit - (globalOwned[stock.name] || 0) : Infinity;
-              const capReached = limit?.perPlayerLimit ? (portfolio[stock.name] || 0) >= limit.perPlayerLimit : false;
+              const capReached = limit?.perPlayerLimit
+                ? (portfolio[stock.name] || 0) >= limit.perPlayerLimit + extraLimit
+                : false;
               return (
                 <StockCard
                   key={stock.name}
