@@ -13,13 +13,15 @@ function StockCard({ stock, owned, balance, onBuy, onSell, globalRemaining, play
   const [expanded, setExpanded] = useState(false);
   const [flash, setFlash] = useState(null);
 
-  const handleBuy = () => {
+  const handleBuy = (e) => {
+    e.stopPropagation();
     setFlash('buy');
     onBuy(stock.name);
     setTimeout(() => setFlash(null), 300);
   };
 
-  const handleSell = () => {
+  const handleSell = (e) => {
+    e.stopPropagation();
     setFlash('sell');
     onSell(stock.name);
     setTimeout(() => setFlash(null), 300);
