@@ -267,30 +267,31 @@ function Dashboard() {
     }
   };
 
-  const handleBuy = (stockName) => {
+  const handleBuy = (stockName, qty = 1) => {
     const stock = stocks.find((s) => s.name === stockName);
     const cap = limits[stockName];
     const owned = portfolio[stockName] || 0;
     const globalCount = globalOwned[stockName] || 0;
     if (cap) {
-      if (globalCount >= cap.globalLimit) {
+      if (globalCount + qty > cap.globalLimit) {
         addToast(`${stockName} is sold out`);
         return;
       }
-      if (cap.perPlayerLimit && owned >= cap.perPlayerLimit + extraLimit) {
+      if (cap.perPlayerLimit && owned + qty > cap.perPlayerLimit + extraLimit) {
         addToast(`You reached the limit for ${stockName}`);
         return;
       }
     }
-    if (balance >= stock.price) {
-      setBalance((b) => b - stock.price);
-      setPortfolio((p) => ({ ...p, [stockName]: owned + 1 }));
-      setGlobalOwned((g) => {
-        const updated = { ...g, [stockName]: globalCount + 1 };
-        return updated;
-      });
+    const cost = stock.price * qty;
+    if (balance >= cost) {
+      setBalance((b) => b - cost);
+      setPortfolio((p) => ({ ...p, [stockName]: owned + qty }));
+      setGlobalOwned((g) => ({
+        ...g,
+        [stockName]: (g[stockName] || 0) + qty,
+      }));
       playSound('buy');
-      addToast(`Bought 1 ${stockName} for ${stock.price}\u00A2`, 'success');
+      addToast(`Bought ${qty} ${stockName} for ${cost}\u00A2`, 'success');
       confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
       flash();
     } else {
@@ -298,19 +299,19 @@ function Dashboard() {
     }
   };
 
-  const handleSell = (stockName) => {
-    if (portfolio[stockName] > 0) {
+  const handleSell = (stockName, qty = 1) => {
+    const owned = portfolio[stockName] || 0;
+    if (owned >= qty) {
       const stock = stocks.find((s) => s.name === stockName);
-      const sellPrice = Math.round(stock.price * portfolioBonus);
+      const sellPrice = Math.round(stock.price * portfolioBonus) * qty;
       setBalance((b) => b + sellPrice);
-      setPortfolio((p) => ({ ...p, [stockName]: p[stockName] - 1 }));
-      setGlobalOwned((g) => {
-        const count = (g[stockName] || 0) - 1;
-        const updated = { ...g, [stockName]: Math.max(0, count) };
-        return updated;
-      });
+      setPortfolio((p) => ({ ...p, [stockName]: owned - qty }));
+      setGlobalOwned((g) => ({
+        ...g,
+        [stockName]: Math.max(0, (g[stockName] || 0) - qty),
+      }));
       playSound('sell');
-      addToast(`Sold 1 ${stockName} for ${sellPrice}\u00A2`, 'success');
+      addToast(`Sold ${qty} ${stockName} for ${sellPrice}\u00A2`, 'success');
       flash();
     } else {
       addToast(`No ${stockName} stock to sell`);
@@ -389,9 +390,9 @@ function Dashboard() {
     const name = parts[1];
     const qty = parseInt(parts[2], 10) || 1;
     if (action === 'BUY') {
-      for (let i = 0; i < qty; i++) handleBuy(name);
+      handleBuy(name, qty);
     } else if (action === 'SELL') {
-      for (let i = 0; i < qty; i++) handleSell(name);
+      handleSell(name, qty);
     }
   };
 

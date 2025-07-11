@@ -16,18 +16,14 @@ function StockCard({ stock, owned, balance, onBuy, onSell, globalRemaining, play
   const handleBuyQty = (e, qty) => {
     e.stopPropagation();
     setFlash('buy');
-    for (let i = 0; i < qty; i++) {
-      onBuy(stock.name);
-    }
+    onBuy(stock.name, qty);
     setTimeout(() => setFlash(null), 300);
   };
 
   const handleSellQty = (e, qty) => {
     e.stopPropagation();
     setFlash('sell');
-    for (let i = 0; i < qty; i++) {
-      onSell(stock.name);
-    }
+    onSell(stock.name, qty);
     setTimeout(() => setFlash(null), 300);
   };
 
@@ -118,7 +114,7 @@ function StockCard({ stock, owned, balance, onBuy, onSell, globalRemaining, play
           <span className="text-red-400 ml-1">Cap reached</span>
         )}
       </div>
-      <div className="mt-auto flex flex-wrap gap-2">
+      <div className="mt-auto flex flex-wrap gap-2 justify-center">
         {[1, 5, 10].map((qty) => (
           <button
             key={`buy-${qty}`}
