@@ -43,12 +43,12 @@ function StockCard({ stock, owned, balance, onBuy, onSell, globalRemaining, play
   return (
     <div
       onClick={() => setExpanded((e) => !e)}
-      className={`neon-card p-4 pb-6 mb-4 flex flex-col gap-2 cursor-pointer transition-all hover:shadow-cyan-500 hover:scale-105 h-96 overflow-hidden ${
+      className={`neon-card p-4 pb-6 mb-4 flex flex-col gap-2 cursor-pointer transition-all hover:shadow-cyan-500 hover:scale-105 h-[28rem] overflow-hidden ${
         flash === 'buy'
           ? 'border-green-500 animate-flash'
           : flash === 'sell'
-          ? 'border-red-500 animate-flash'
-          : 'border-cyan-400'
+            ? 'border-red-500 animate-flash'
+            : 'border-cyan-400'
       }`}
     >
       <div className="flex justify-between items-start flex-wrap gap-y-1">
