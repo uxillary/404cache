@@ -86,7 +86,7 @@ function Dashboard() {
   const [showCmd, setShowCmd] = useState(false);
 
   const addToast = (message, type = 'info') => {
-    toast(message, { type });
+    toast(message, { type, toastId: message });
   };
 
   const flash = () => {
@@ -284,14 +284,20 @@ function Dashboard() {
     }
     const cost = stock.price * qty;
     if (balance >= cost) {
+      const newOwned = owned + qty;
+      const newGlobal = globalCount + qty;
       setBalance((b) => b - cost);
-      setPortfolio((p) => ({ ...p, [stockName]: owned + qty }));
+      setPortfolio((p) => ({ ...p, [stockName]: newOwned }));
       setGlobalOwned((g) => ({
         ...g,
-        [stockName]: (g[stockName] || 0) + qty,
+        [stockName]: newGlobal,
       }));
       playSound('buy');
-      addToast(`Bought ${qty} ${stockName} for ${cost}\u00A2`, 'success');
+      const remaining = cap ? cap.globalLimit - newGlobal : '∞';
+      addToast(
+        `Bought ${qty} ${stockName} for ${cost}\u00A2. Owned: ${newOwned}. Remaining: ${remaining}`,
+        'success',
+      );
       confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
       flash();
     } else {
@@ -304,14 +310,22 @@ function Dashboard() {
     if (owned >= qty) {
       const stock = stocks.find((s) => s.name === stockName);
       const sellPrice = Math.round(stock.price * portfolioBonus) * qty;
+      const newOwned = owned - qty;
+      const newGlobal = Math.max(0, (globalOwned[stockName] || 0) - qty);
       setBalance((b) => b + sellPrice);
-      setPortfolio((p) => ({ ...p, [stockName]: owned - qty }));
+      setPortfolio((p) => ({ ...p, [stockName]: newOwned }));
       setGlobalOwned((g) => ({
         ...g,
-        [stockName]: Math.max(0, (g[stockName] || 0) - qty),
+        [stockName]: newGlobal,
       }));
       playSound('sell');
-      addToast(`Sold ${qty} ${stockName} for ${sellPrice}\u00A2`, 'success');
+      const remaining = limits[stockName]
+        ? limits[stockName].globalLimit - newGlobal
+        : '∞';
+      addToast(
+        `Sold ${qty} ${stockName} for ${sellPrice}\u00A2. Owned: ${newOwned}. Remaining: ${remaining}`,
+        'success',
+      );
       flash();
     } else {
       addToast(`No ${stockName} stock to sell`);
