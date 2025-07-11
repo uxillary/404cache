@@ -114,7 +114,7 @@ function StockCard({ stock, owned, balance, onBuy, onSell, globalRemaining, play
           <span className="text-red-400 ml-1">Cap reached</span>
         )}
       </div>
-      <div className="mt-auto flex flex-wrap gap-2 justify-center">
+      <div className="mt-auto grid grid-cols-3 gap-2 w-full">
         {[1, 5, 10].map((qty) => (
           <button
             key={`buy-${qty}`}
