@@ -13,19 +13,20 @@ function StockCard({ stock, owned, balance, onBuy, onSell, globalRemaining, play
   const [expanded, setExpanded] = useState(false);
   const [flash, setFlash] = useState(null);
 
-  const handleBuy = (e) => {
+  const handleBuyQty = (e, qty) => {
     e.stopPropagation();
     setFlash('buy');
-    onBuy(stock.name);
+    onBuy(stock.name, qty);
     setTimeout(() => setFlash(null), 300);
   };
 
-  const handleSell = (e) => {
+  const handleSellQty = (e, qty) => {
     e.stopPropagation();
     setFlash('sell');
-    onSell(stock.name);
+    onSell(stock.name, qty);
     setTimeout(() => setFlash(null), 300);
   };
+
 
   const rawHistory = stock.history && stock.history.length ? stock.history : [stock.price];
   const graphHistory = rawHistory.length === 1 ? [rawHistory[0], rawHistory[0]] : rawHistory;
@@ -42,13 +43,13 @@ function StockCard({ stock, owned, balance, onBuy, onSell, globalRemaining, play
   return (
     <div
       onClick={() => setExpanded((e) => !e)}
-      className={`neon-card p-4 mb-4 flex flex-col gap-2 cursor-pointer transition-all hover:shadow-cyan-500 hover:scale-105 min-h-56 ${
+      className={`neon-card p-4 pb-6 mb-4 flex flex-col gap-2 cursor-pointer transition-all hover:shadow-cyan-500 hover:scale-105 h-[28rem] overflow-hidden ${
         flash === 'buy'
           ? 'border-green-500 animate-flash'
           : flash === 'sell'
-          ? 'border-red-500 animate-flash'
-          : 'border-cyan-400'
-      } ${expanded ? 'max-h-80' : 'max-h-56'}`}
+            ? 'border-red-500 animate-flash'
+            : 'border-cyan-400'
+      }`}
     >
       <div className="flex justify-between items-start flex-wrap gap-y-1">
         <div className="flex items-center gap-2 flex-wrap">
@@ -113,26 +114,40 @@ function StockCard({ stock, owned, balance, onBuy, onSell, globalRemaining, play
           <span className="text-red-400 ml-1">Cap reached</span>
         )}
       </div>
-      <div className="mt-auto flex gap-2">
-        <button
-          onClick={handleBuy}
-          className="neon-button bg-green-700 hover:bg-green-900 disabled:opacity-50"
-          disabled={balance < stock.price}
-        >
-          Buy
-        </button>
-        <button
-          onClick={handleSell}
-          className="neon-button bg-red-700 hover:bg-red-900 disabled:opacity-50"
-          disabled={owned === 0}
-        >
-          Sell
-        </button>
+      <div className="mt-auto space-y-2">
+        <div className="flex flex-wrap justify-center gap-2 w-full">
+          {[1, 5, 10].map((qty) => (
+            <button
+              key={`buy-${qty}`}
+              onClick={(e) => handleBuyQty(e, qty)}
+              className="neon-button bg-green-700 hover:bg-green-900 disabled:opacity-50 px-2 py-1 text-xs"
+              disabled={
+                balance < stock.price * qty ||
+                playerCapReached ||
+                globalRemaining < qty
+              }
+            >
+              Buy {qty}
+            </button>
+          ))}
+        </div>
+        <div className="flex flex-wrap justify-center gap-2 w-full">
+          {[1, 5, 10].map((qty) => (
+            <button
+              key={`sell-${qty}`}
+              onClick={(e) => handleSellQty(e, qty)}
+              className="neon-button bg-red-700 hover:bg-red-900 disabled:opacity-50 px-2 py-1 text-xs"
+              disabled={owned < qty}
+            >
+              Sell {qty}
+            </button>
+          ))}
+        </div>
       </div>
       {expanded && (
-        <div className="mt-2 text-sm text-green-200">
-          <div>Recent: {history.slice(-5).join(', ')}</div>
-          <div className="mt-1">{LORE[stock.name] || 'No data available.'}</div>
+        <div className="mt-2 text-sm text-green-200 overflow-y-auto max-h-32 pr-1">
+          <div>Recent: {rawHistory.slice(-5).join(', ')}</div>
+          <div className="mt-1 truncate">{LORE[stock.name] || 'No data available.'}</div>
         </div>
       )}
     </div>
