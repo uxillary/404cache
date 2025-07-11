@@ -4,7 +4,7 @@ function Layout({ children, sidebar }) {
   const [showMobileSidebar, setShowMobileSidebar] = useState(false)
 
   return (
-    <div className="min-h-screen flex bg-gradient-to-br from-gray-950 via-black to-black text-green-300 font-sans crt-effect shadow-inner">
+    <div className="min-h-screen flex bg-gradient-to-br from-gray-950 via-black to-black text-green-300 font-retro crt-effect shadow-inner">
       {sidebar && React.cloneElement(sidebar, { className: `${sidebar.props.className ?? ''} hidden lg:block` })}
       <div className="flex-1 p-6 md:p-10">
         <div className="max-w-5xl mx-auto">{children}</div>

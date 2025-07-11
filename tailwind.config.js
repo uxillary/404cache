@@ -5,6 +5,7 @@ export default {
     extend: {
       fontFamily: {
         mono: ['"Share Tech Mono"', 'monospace'],
+        retro: ['"VT323"', '"Share Tech Mono"', 'monospace'],
       },
       keyframes: {
         'bounce-small': {

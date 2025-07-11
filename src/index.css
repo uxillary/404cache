@@ -27,7 +27,7 @@ body {
 }
 
 :root {
-  font-family: 'Inter', sans-serif;
+  font-family: 'VT323', 'Share Tech Mono', monospace;
   line-height: 1.5;
   font-weight: 400;
 
@@ -99,7 +99,7 @@ button:focus-visible {
 :root {
   --bg-color: radial-gradient(circle at 50% 0px, rgb(0, 34, 34), rgb(0, 0, 0));
   --text-color: #0ff;
-  --font-family: 'Inter', sans-serif;
+  --font-family: 'VT323', 'Share Tech Mono', monospace;
 }
 
 .terminal-mode {
